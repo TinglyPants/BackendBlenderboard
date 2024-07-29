@@ -44,8 +44,11 @@ router.post("/create", (req, res) => {
 });
 
 // Read
-router.get("/read", (req, res) => {
-    res.status(501).send("Not Implemented");
+router.get("/read/:postID", (req, res) => {
+    const requestedID = req.params.postID;
+    const requestedPost = Post.findById(requestedID).exec();
+
+    res.status(200).send(requestedPost);
 });
 
 // Update
