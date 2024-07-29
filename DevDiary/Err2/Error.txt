@@ -1,0 +1,19 @@
+When attempting GET "http://86.167.176.156:4000/posts/read", received 404 Not Found after timeout.
+Figure1 = API tester
+Figure2 = code
+
+Solution attempt one: Try{}Catch{} errors from mongoose query 
+Figure3 = code
+
+Solution attempt two: Perhaps because query is asynchronous, it is not being caught in try catch. Wrapping in IIFE
+This did not work.
+Figure4 = code
+
+Solution attempt three: Making entire request asynchronous
+This partially worked
+Figure5 = code
+
+New problem: when ID is valid but not found, undefined is sent.
+Solution: If statement.
+This worked. 
+Figure6 = code

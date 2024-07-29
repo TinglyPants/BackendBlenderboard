@@ -45,10 +45,21 @@ router.post("/create", (req, res) => {
 
 // Read
 router.get("/read/:postID", (req, res) => {
-    const requestedID = req.params.postID;
-    const requestedPost = Post.findById(requestedID).exec();
+    // Wrapped in async IIFE for error handling
+    (async () => {
+        try {
+            const requestedID = req.params.postID;
+            const requestedPost = await Post.findById(requestedID).exec();
 
-    res.status(200).send(requestedPost);
+            if (requestedPost === null) {
+                res.status(404).send("Not Found");
+            } else {
+                res.status(200).send(requestedPost);
+            }
+        } catch (err) {
+            res.status(400).send("Invalid ID");
+        }
+    })();
 });
 
 // Update
