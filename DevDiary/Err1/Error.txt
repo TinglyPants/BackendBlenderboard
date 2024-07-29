@@ -1,0 +1,8 @@
+Post is not being saved to database, despite running with no errors
+Figure1 = API tester
+Figure2 = code
+Figure3 = MongoDB compass
+
+Solution: Was not explicitly saving post after creation.
+Figure4 = code working
+Figure5 = MongoDB compass after

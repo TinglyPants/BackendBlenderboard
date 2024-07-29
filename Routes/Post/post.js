@@ -38,6 +38,8 @@ router.post("/create", (req, res) => {
     createdPost.Videos.push("video2.mp4");
     createdPost.Comments.push(null); // to be added in later prototype
 
+    createdPost.save();
+
     res.status(200).send("Created post!");
 });
 
