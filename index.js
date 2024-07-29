@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const multer = require("multer");
 
 // Allowing for cross-origin resource sharing. (middleware)
 app.use(cors());
