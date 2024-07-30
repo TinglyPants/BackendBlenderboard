@@ -62,6 +62,10 @@ router.get("/read/:postID", (req, res) => {
     })();
 });
 
+router.get("/homepage", (req, res) => {
+    // Gather list of given post IDs sorted by post date and send back
+});
+
 // Update
 router.put("/update", (req, res) => {
     res.status(501).send("Not Implemented");
