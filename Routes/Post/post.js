@@ -64,6 +64,16 @@ router.get("/read/:postID", (req, res) => {
 
 router.get("/homepage", (req, res) => {
     // Gather list of given post IDs sorted by post date and send back
+    (async () => {
+        // 10 most recent posts.
+        const posts = await Post.find()
+            .sort({ DateOfCreation: "asc" })
+            .limit(10)
+            .exec();
+
+        console.log(posts);
+        res.send(posts);
+    })();
 });
 
 // Update
