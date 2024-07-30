@@ -69,6 +69,7 @@ router.put("/update", (req, res) => {
 
 // Delete
 router.delete("/delete/:postID", (req, res) => {
+    // Wrapped in async IIFE for error handling
     (async () => {
         try {
             const requestedID = req.params.postID;
@@ -82,6 +83,7 @@ router.delete("/delete/:postID", (req, res) => {
                 res.status(404).send("Post not found");
             }
         } catch (err) {
+            // Post.deleteOne threw a BSON error
             res.status(400).send("Invalid ID");
         }
     })();
