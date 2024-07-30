@@ -68,8 +68,22 @@ router.put("/update", (req, res) => {
 });
 
 // Delete
-router.delete("/delete", (req, res) => {
-    res.status(501).send("Not Implemented");
+router.delete("/delete/:postID", (req, res) => {
+    (async () => {
+        try {
+            const requestedID = req.params.postID;
+            const result = await Post.deleteOne({
+                _id: mongoose.Types.ObjectId(requestedID),
+            });
+            if (result.deletedCount > 0) {
+                res.status(200).send("Successfully deleted");
+            } else {
+                res.status(404).send("Post not found");
+            }
+        } catch (err) {
+            res.status(400).send("Invalid ID");
+        }
+    })();
 });
 
 module.exports = router;
