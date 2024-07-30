@@ -67,7 +67,7 @@ router.get("/homepage", (req, res) => {
     (async () => {
         // 10 most recent posts.
         const posts = await Post.find()
-            .sort({ DateOfCreation: "asc" })
+            .sort({ DateOfCreation: "desc" })
             .limit(10)
             .exec();
 

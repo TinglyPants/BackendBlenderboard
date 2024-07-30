@@ -1,0 +1,10 @@
+Posts from /homepage are in the wrong order
+
+Figure1 = /homepage results
+Figure2 = code
+
+Solution: reverse order
+Figure3 = code after
+Figure4 = / homepage new results
+
+This worked
