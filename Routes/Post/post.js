@@ -73,8 +73,9 @@ router.delete("/delete/:postID", (req, res) => {
         try {
             const requestedID = req.params.postID;
             const result = await Post.deleteOne({
-                _id: mongoose.Types.ObjectId(requestedID),
+                _id: new mongoose.Types.ObjectId(requestedID),
             });
+
             if (result.deletedCount > 0) {
                 res.status(200).send("Successfully deleted");
             } else {

@@ -1,0 +1,7 @@
+Request for deleting http://localhost:4000/posts/delete/66a8fad923f0dc9e1af95062 is not working
+Figure1 = code
+
+Solution: need "new" keyword when instantiating mongoose.Types.ObjectId.
+Figure2 = code after
+
+This worked
