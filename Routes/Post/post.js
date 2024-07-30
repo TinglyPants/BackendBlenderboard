@@ -21,12 +21,12 @@ router.get("/active", (req, res) => {
 });
 
 // Create
-router.post("/create", (req, res) => {
+router.post("/create/:temp", (req, res) => {
     // Create new instance of Post model to be saved in database
     const createdPost = new Post();
 
     // Using fake data for testing purposes
-    createdPost.Title = "Example Title";
+    createdPost.Title = req.params.temp;
     createdPost.Description = "Example Description";
     createdPost.Author = null; // to be added in later prototype
     createdPost.Score = 0; // to be added in later prototype

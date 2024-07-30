@@ -1,0 +1,9 @@
+I cant really tell if my posts are in the right order or not.
+
+Solution: Modifying the /create endpoint to allow version numbers, temporarily
+Figure1 = /homepage response
+Figure2 = /create before
+Figure3 = little testing script
+Figure4 = /create after
+
+This works :thumbs-up:
