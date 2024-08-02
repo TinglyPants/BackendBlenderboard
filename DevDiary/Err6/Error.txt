@@ -1,0 +1,11 @@
+Multer does not appear to be recognising the files existing when the request is received.
+Figure1 = backend code
+Figure2 = backend server logs
+
+solution: I think the frontend is sending incorrectly.
+Notice in figure2 that req.body has all of the keys, and also that images is a string "[object FileList]". This is odd.
+Im going to change the frontend code to solve this, so git will store the solution in that frontend repo but the report will be here.
+Yes, i needed to append individual files instead of the whole list.
+
+Figure3 = frontend code
+Figure4 = backend server logs afterwards
