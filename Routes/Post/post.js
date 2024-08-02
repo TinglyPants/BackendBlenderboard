@@ -15,33 +15,65 @@ mongoose.connect("mongodb://127.0.0.1:27017/postsDB");
 const postSchema = require("./postSchema");
 const Post = mongoose.model("Post", postSchema);
 
+// Setting up multer (middleware)
+// Stores files in memory as a buffer
+const memStorage = multer.memoryStorage();
+
+const upload = multer({
+    storage: memStorage,
+    // function to filter invalid files appropriately
+    fileFilter: (req, file, cb) => {
+        // Does nothing at the moment.
+        cb(null, true);
+    },
+});
+
+// Allows express to use json and urlencoded data (middleware)
+router.use(express.urlencoded({ extended: true }));
+router.use(express.json());
+
 // Used to test if post endpoint is available
 router.get("/active", (req, res) => {
     res.status(200).send("Post endpoint active!");
 });
 
 // Create
-router.post("/create", (req, res) => {
-    // Create new instance of Post model to be saved in database
-    const createdPost = new Post();
+router.post(
+    "/create",
+    // upload middleware retrieves all files
+    upload.fields([
+        { name: "images", maxCount: 12 },
+        { name: "video", maxCount: 1 },
+        { name: "model", maxCount: 1 },
+    ]),
+    (req, res) => {
+        /*
+        // Create new instance of Post model to be saved in database
+        const createdPost = new Post();
 
-    // Using fake data for testing purposes
-    createdPost.Title = "Example Title";
-    createdPost.Description = "Example Description";
-    createdPost.Author = null; // to be added in later prototype
-    createdPost.Score = 0; // to be added in later prototype
-    createdPost.DateOfCreation = Date.now();
-    createdPost.Model = "filename.obj";
-    createdPost.Images.push("image1.png");
-    createdPost.Images.push("image2.png");
-    createdPost.Videos.push("video1.mp4");
-    createdPost.Videos.push("video2.mp4");
-    createdPost.Comments.push(null); // to be added in later prototype
+        // Using fake data for testing purposes
+        createdPost.Title = "Example Title";
+        createdPost.Description = "Example Description";
+        createdPost.Author = null; // to be added in later prototype
+        createdPost.Score = 0; // to be added in later prototype
+        createdPost.DateOfCreation = Date.now();
+        createdPost.Model = "filename.obj";
+        createdPost.Images.push("image1.png");
+        createdPost.Images.push("image2.png");
+        createdPost.Videos.push("video1.mp4");
+        createdPost.Videos.push("video2.mp4");
+        createdPost.Comments.push(null); // to be added in later prototype
 
-    createdPost.save();
+        createdPost.save();
 
-    res.status(200).send("Created post!");
-});
+        */
+
+        console.dir(req.files);
+        console.dir(req.body);
+
+        res.status(200).send({ success: true });
+    }
+);
 
 // Read
 router.get("/read/:postID", (req, res) => {
