@@ -152,9 +152,28 @@ router.post(
             });
         }
 
+        if (req.files.model) {
+            const newFileName =
+                uuid() + path.extname(req.files.model[0].originalname);
+
+            createdPost.Model = newFileName;
+
+            const filePath = path.join(
+                __dirname,
+                "../../mediaStorage/model",
+                newFileName
+            );
+
+            fs.writeFile(filePath, req.files.model[0].buffer, (err) => {
+                if (err) {
+                    console.log("Error saving model:" + err);
+                }
+            });
+        }
+
         createdPost.Comments.push(null); // to be added in later prototype
 
-        //createdPost.save();
+        createdPost.save();
 
         res.status(200).send({ success: true });
     }
