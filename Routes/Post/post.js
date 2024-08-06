@@ -8,6 +8,7 @@ const multer = require("multer");
 // Node filesystem handling
 const path = require("path");
 const fs = require("fs");
+const { uuid } = require("uuidv4");
 
 // Mongoose connection
 mongoose.connect("mongodb://127.0.0.1:27017/postsDB");
@@ -96,28 +97,42 @@ router.post(
         { name: "model", maxCount: 1 },
     ]),
     (req, res) => {
-        /*
         // Create new instance of Post model to be saved in database
         const createdPost = new Post();
 
-        // Using fake data for testing purposes
-        createdPost.Title = "Example Title";
-        createdPost.Description = "Example Description";
+        // Guard clauses
+        if (req.body.title === "") {
+            res.status(400).send("You must have a title!");
+        }
+        if (req.body.description === "") {
+            res.status(400).send("You must have a description!");
+        }
+
+        createdPost.Title = req.body.title;
+        createdPost.Description = req.body.description;
         createdPost.Author = null; // to be added in later prototype
         createdPost.Score = 0; // to be added in later prototype
         createdPost.DateOfCreation = Date.now();
-        createdPost.Model = "filename.obj";
-        createdPost.Images.push("image1.png");
-        createdPost.Images.push("image2.png");
-        createdPost.Videos.push("video1.mp4");
-        createdPost.Videos.push("video2.mp4");
+
+        // File handling section
+        req.files.images.forEach((image) => {
+            console.log(image.originalname);
+            const newFileName = uuid() + path.extname(image.originalname);
+            const filePath = path.join(
+                __dirname,
+                "../../mediaStorage/image",
+                newFileName
+            );
+            fs.writeFile(filePath, image.buffer, (err) => {
+                if (err) {
+                    console.log("Error saving image:" + err);
+                }
+            });
+        });
+
         createdPost.Comments.push(null); // to be added in later prototype
 
-        createdPost.save();
-
-        */
-
-        console.log(req.files);
+        //createdPost.save();
 
         res.status(200).send({ success: true });
     }
