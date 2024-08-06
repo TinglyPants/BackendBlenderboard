@@ -116,13 +116,16 @@ router.post(
 
         // File handling section
         req.files.images.forEach((image) => {
-            console.log(image.originalname);
             const newFileName = uuid() + path.extname(image.originalname);
+
+            createdPost.Images.push(newFileName);
+
             const filePath = path.join(
                 __dirname,
                 "../../mediaStorage/image",
                 newFileName
             );
+
             fs.writeFile(filePath, image.buffer, (err) => {
                 if (err) {
                     console.log("Error saving image:" + err);
