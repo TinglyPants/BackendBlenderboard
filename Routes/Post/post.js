@@ -19,7 +19,7 @@ const Post = mongoose.model("Post", postSchema);
 // Stores files in memory as a buffer
 const memStorage = multer.memoryStorage();
 
-const isValidFile = (allowedMimeTypes, filenameRegex) => {
+const isValidFile = (allowedMimeTypes, filenameRegex, file) => {
     if (allowedMimeTypes !== null) {
         // if mimetype invalid, reject file
         if (!allowedMimeTypes.includes(file.mimetype)) {
@@ -47,7 +47,8 @@ const upload = multer({
                     null,
                     isValidFile(
                         ["image/png", "image/jpeg", "image/gif", "image/webp"],
-                        /(.png|.jpg|.jpeg|.gif|.webp)$/
+                        /(.png|.jpg|.jpeg|.gif|.webp)$/,
+                        file
                     )
                 );
                 break;
@@ -57,7 +58,8 @@ const upload = multer({
                     null,
                     isValidFile(
                         ["video/mp4", "video/webm", "video/ogg"],
-                        /(.mp4|.webm|.ogg)$/
+                        /(.mp4|.webm|.ogg)$/,
+                        file
                     )
                 );
                 break;
@@ -65,7 +67,7 @@ const upload = multer({
                 // model file filtering
                 return cb(
                     null,
-                    isValidFile(null, /(.obj|.fbx|.stl|.gltf|.glb|.dae)$/)
+                    isValidFile(null, /(.obj|.fbx|.stl|.gltf|.glb|.dae)$/, file)
                 );
                 break;
             default:
@@ -114,6 +116,8 @@ router.post(
         createdPost.save();
 
         */
+
+        console.log(req.files);
 
         res.status(200).send({ success: true });
     }
