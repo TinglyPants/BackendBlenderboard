@@ -133,6 +133,25 @@ router.post(
             });
         });
 
+        if (req.files.video) {
+            const newFileName =
+                uuid() + path.extname(req.files.video[0].originalname);
+
+            createdPost.Videos.push(newFileName);
+
+            const filePath = path.join(
+                __dirname,
+                "../../mediaStorage/video",
+                newFileName
+            );
+
+            fs.writeFile(filePath, req.files.video[0].buffer, (err) => {
+                if (err) {
+                    console.log("Error saving video:" + err);
+                }
+            });
+        }
+
         createdPost.Comments.push(null); // to be added in later prototype
 
         //createdPost.save();
