@@ -207,8 +207,12 @@ router.get("/homepage", (req, res) => {
             .limit(10)
             .exec();
 
-        console.log(posts);
-        res.send(posts);
+        const postIDArray = [];
+        posts.forEach((post) => {
+            postIDArray.push(post._id.toString());
+        });
+        console.log(postIDArray);
+        res.send(postIDArray);
     })();
 });
 
