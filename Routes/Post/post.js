@@ -190,7 +190,18 @@ router.get("/read/:postID", (req, res) => {
             if (requestedPost === null) {
                 res.status(404).send("Not Found");
             } else {
-                res.status(200).send(requestedPost);
+                const requestedPostObj = {
+                    title: requestedPost.Title,
+                    description: requestedPost.Description,
+                    author: requestedPost.Author,
+                    score: requestedPost.Score,
+                    dateOfCreation: requestedPost.DateOfCreation,
+                    images: requestedPost.Images,
+                    video: requestedPost.Videos[0],
+                    model: requestedPost.Model,
+                    comments: requestedPost.Comments,
+                };
+                res.status(200).send(requestedPostObj);
             }
         } catch (err) {
             res.status(400).send("Invalid ID");
