@@ -25,4 +25,23 @@ router.get("/image/:imageID", (req, res) => {
     }
 });
 
+router.get("/video/:videoID", (req, res) => {
+    if (!isUuid(path.parse(req.params.videoID).name)) {
+        // If invalid UUID, reject
+        res.status(400).send("Invalid filename");
+        return;
+    }
+    const searchPath = path.join(
+        __dirname,
+        "../../mediaStorage/video",
+        req.params.videoID
+    );
+    // Check if file exists first
+    if (fs.existsSync(searchPath)) {
+        res.sendFile(searchPath);
+    } else {
+        res.send("No file found.");
+    }
+});
+
 module.exports = router;
