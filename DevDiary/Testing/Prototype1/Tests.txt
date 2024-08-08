@@ -36,3 +36,29 @@ Read Media:
 14.2 Passed
 14.3 Passed
 14.4 Passed
+
+--- RE TEST 1 ---
+Create Post:
+9.1 - 9.2 N/A not implemented
+9.3 Passed
+9.4 Passed
+9.5 Passed
+9.6 Passed
+9.7 Passed
+9.8 Passed
+9.9 Passed
+9.10 Passed
+9.11 Passed
+9.12 Passed
+9.13 Passed
+9.14 Passed
+9.15 Passed
+9.16 Passed
+9.17 Passed
+9.18 Passed
+9.19 Passed
+9.20 Passed
+9.21 Passed
+9.22 Passed
+9.23 Passed
+9.24 - 9.27 N/A not implemented
