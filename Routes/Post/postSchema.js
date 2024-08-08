@@ -9,7 +9,7 @@ const postSchema = new Schema({
     DateOfCreation: Date,
     Model: String,
     Images: [String],
-    Videos: [String],
+    Video: String,
     Comments: [Schema.Types.ObjectId],
 });
 

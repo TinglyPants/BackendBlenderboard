@@ -91,21 +91,57 @@ router.get("/active", (req, res) => {
 router.post(
     "/create",
     // upload middleware retrieves all files
-    upload.fields([
-        { name: "images", maxCount: 12 },
-        { name: "video", maxCount: 1 },
-        { name: "model", maxCount: 1 },
-    ]),
+    upload.fields([{ name: "images" }, { name: "video" }, { name: "model" }]),
     (req, res) => {
         // Create new instance of Post model to be saved in database
         const createdPost = new Post();
 
-        // Guard clauses
+        // Guard clauses for title
         if (req.body.title === "") {
             res.status(400).send("You must have a title!");
+            return;
         }
+        if (req.body.title.length > 120) {
+            res.status(400).send("Your title is too big!");
+            return;
+        }
+
+        // Guard clauses for description
         if (req.body.description === "") {
             res.status(400).send("You must have a description!");
+            return;
+        }
+        if (req.body.description.length > 3000) {
+            res.status(400).send("Your description is too big!");
+            return;
+        }
+
+        // Media presence check, ensures at least one image or one video
+        if (req.files.images === undefined && req.files.video === undefined) {
+            res.status(400).send("You must include media!");
+            return;
+        }
+
+        // Media count checks
+        if (req.files.images) {
+            if (req.files.images.length > 12) {
+                res.status(400).send("Too many images!");
+                return;
+            }
+        }
+
+        if (req.files.video) {
+            if (req.files.video.length > 1) {
+                res.status(400).send("Too many videos!");
+                return;
+            }
+        }
+
+        if (req.files.model) {
+            if (req.files.model.length > 1) {
+                res.status(400).send("Too many models!");
+                return;
+            }
         }
 
         createdPost.Title = req.body.title;
@@ -114,30 +150,32 @@ router.post(
         createdPost.Score = 0; // to be added in later prototype
         createdPost.DateOfCreation = Date.now();
 
-        // File handling section
-        req.files.images.forEach((image) => {
-            const newFileName = uuid() + path.extname(image.originalname);
+        // File handling
+        if (req.files.images) {
+            req.files.images.forEach((image) => {
+                const newFileName = uuid() + path.extname(image.originalname);
 
-            createdPost.Images.push(newFileName);
+                createdPost.Images.push(newFileName);
 
-            const filePath = path.join(
-                __dirname,
-                "../../mediaStorage/image",
-                newFileName
-            );
+                const filePath = path.join(
+                    __dirname,
+                    "../../mediaStorage/image",
+                    newFileName
+                );
 
-            fs.writeFile(filePath, image.buffer, (err) => {
-                if (err) {
-                    console.log("Error saving image:" + err);
-                }
+                fs.writeFile(filePath, image.buffer, (err) => {
+                    if (err) {
+                        console.log("Error saving image:" + err);
+                    }
+                });
             });
-        });
+        }
 
         if (req.files.video) {
             const newFileName =
                 uuid() + path.extname(req.files.video[0].originalname);
 
-            createdPost.Videos.push(newFileName);
+            createdPost.Video = newFileName;
 
             const filePath = path.join(
                 __dirname,
@@ -197,7 +235,7 @@ router.get("/read/:postID", (req, res) => {
                     score: requestedPost.Score,
                     dateOfCreation: requestedPost.DateOfCreation,
                     images: requestedPost.Images,
-                    video: requestedPost.Videos[0],
+                    video: requestedPost.Video,
                     model: requestedPost.Model,
                     comments: requestedPost.Comments,
                 };
