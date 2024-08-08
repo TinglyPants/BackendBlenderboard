@@ -1,0 +1,38 @@
+Create Post:
+9.1 - 9.2 N/A not implemented
+9.3 Passed
+9.4 Passed
+9.5 Passed
+9.6 Passed
+9.7 Failed, need to implement
+9.8 Passed
+9.9 Passed
+9.10 Passed
+9.11 Passed
+9.12 Failed, need to implement
+9.13 Failed
+9.14 Passed but need to implement correctly
+9.15 Failed not implemented correctly
+9.16 Passed
+9.17 Partially Passed (Only adds first 12, does not error)
+9.18 Passed but incorrectly
+9.19 Passed
+9.20 Partially Passed (Only adds first video, does not error)
+9.21 Passed Partially
+9.22 Passed
+9.23 Partially Passed (Only adds first model, does not error)
+9.24 - 9.27 N/A not implemented
+
+Read Post:
+10.1 Passed
+10.2 Passed
+10.3 Passed
+10.4 Passed
+
+Create Media: N/A not implemented
+
+Read Media:
+14.1 Passed
+14.2 Passed
+14.3 Passed
+14.4 Passed
