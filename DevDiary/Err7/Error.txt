@@ -1,0 +1,13 @@
+The problem is, I need to implement a user system. The frontend details will be explained in that repo, but
+for now all I need is for an "auth" key to be sent with every request if the user is logged in. In this "auth"
+key, Ill have the JWT token with user data. This auth key will always be validated before allowing endpoint access.
+If the user sends an invalid auth token, ill send a HTTP 401 unauthorized response to indicate this. If the user doesnt send 
+an auth token at all, they will either be let through or denied access with a 401 depending on whether the endpoint requires
+the user to be logged in or not.
+
+I will handle this with express middleware.
+
+In terms of actually logging in and signing up, Ill need to implement a userDB in mongo to handle that, with its own set of endpoints.
+In fact, thats what I will be doing first on the backend.
+
+This was less of an error and more just an insight into my plans.
