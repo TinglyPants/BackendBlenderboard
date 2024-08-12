@@ -14,7 +14,7 @@ const upload = multer({
 });
 
 // Mongoose connection
-mongoose.connect("mongodb://127.0.0.1:27017/postsDB");
+mongoose.connect("mongodb://127.0.0.1:27017/usersDB");
 
 // Gather post schema and make post model
 const userSchema = require("./userSchema");
