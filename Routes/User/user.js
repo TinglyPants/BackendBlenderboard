@@ -20,6 +20,7 @@ const usersDB = mongoose.createConnection("mongodb://127.0.0.1:27017/usersDB");
 const userSchema = require("./userSchema");
 const { isPresent } = require("../../Utils/isPresent");
 const { isCorrectLength } = require("../../Utils/isCorrectLength");
+const { isValidContent } = require("../../Utils/isValidContent");
 const User = usersDB.model("User", userSchema);
 
 // Allows express to use json and urlencoded data (middleware)
@@ -49,7 +50,7 @@ router.post(
             res.status(400).send("Please include a password.");
             return;
         }
-        if (!isPresent(req.body.profileImage)) {
+        if (!isPresent(req.files.profileImage)) {
             res.status(400).send("Please include a profile image.");
             return;
         }
@@ -75,22 +76,22 @@ router.post(
         // content checks
         const emailRegex =
             /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-        if (emailRegex.test(req.body.email) === false) {
+        if (!isValidContent(req.body.email, emailRegex)) {
             res.status(400).send("Please use a valid email address");
             return;
         }
         const allowedCharsRegex = /^[a-zA-Z0-9!%&?#_\-+,\.\s]+$/;
-        if (allowedCharsRegex.test(req.body.username) === false) {
+        if (!isValidContent(req.body.username, allowedCharsRegex)) {
             res.status(400).send("Invalid characters detected in username!");
             return;
         }
-        if (allowedCharsRegex.test(req.body.password) === false) {
+        if (!isValidContent(req.body.password, allowedCharsRegex)) {
             res.status(400).send("Invalid characters detected in password!");
             return;
         }
         if (
             req.body.bio.length > 0 &&
-            allowedCharsRegex.test(req.body.bio) === false
+            !isValidContent(req.body.bio, allowedCharsRegex)
         ) {
             res.status(400).send("Invalid characters detected in bio!");
             return;
