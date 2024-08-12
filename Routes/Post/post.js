@@ -14,6 +14,7 @@ const { uuid } = require("uuidv4");
 const postsDB = mongoose.createConnection("mongodb://127.0.0.1:27017/postsDB");
 // Gather post schema and make post model
 const postSchema = require("./postSchema");
+const { isPresent } = require("../../Utils/isPresent");
 const Post = postsDB.model("Post", postSchema);
 
 // Setting up multer (middleware)
@@ -97,8 +98,8 @@ router.post(
         const createdPost = new Post();
 
         // Guard clauses for title
-        if (req.body.title === "") {
-            res.status(400).send("You must have a title!");
+        if (!isPresent(req.body.title)) {
+            res.status(400).send("Please include a title.");
             return;
         }
         if (req.body.title.length > 120) {
@@ -107,8 +108,8 @@ router.post(
         }
 
         // Guard clauses for description
-        if (req.body.description === "") {
-            res.status(400).send("You must have a description!");
+        if (!isPresent(req.body.description)) {
+            res.status(400).send("Please include a description.");
             return;
         }
         if (req.body.description.length > 3000) {
@@ -117,27 +118,27 @@ router.post(
         }
 
         // Media presence check, ensures at least one image or one video
-        if (req.files.images === undefined && req.files.video === undefined) {
+        if (!isPresent(req.files.images) && !isPresent(req.files.video)) {
             res.status(400).send("You must include media!");
             return;
         }
 
         // Media count checks
-        if (req.files.images) {
+        if (isPresent(req.files.images)) {
             if (req.files.images.length > 12) {
                 res.status(400).send("Too many images!");
                 return;
             }
         }
 
-        if (req.files.video) {
+        if (isPresent(req.files.video)) {
             if (req.files.video.length > 1) {
                 res.status(400).send("Too many videos!");
                 return;
             }
         }
 
-        if (req.files.model) {
+        if (isPresent(req.files.model)) {
             if (req.files.model.length > 1) {
                 res.status(400).send("Too many models!");
                 return;

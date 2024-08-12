@@ -18,6 +18,7 @@ const usersDB = mongoose.createConnection("mongodb://127.0.0.1:27017/usersDB");
 
 // Gather post schema and make post model
 const userSchema = require("./userSchema");
+const { isPresent } = require("../../Utils/isPresent");
 const User = usersDB.model("User", userSchema);
 
 // Allows express to use json and urlencoded data (middleware)
@@ -35,19 +36,19 @@ router.post(
     upload.fields([{ name: "profileImage" }]),
     async (req, res) => {
         // presence checks
-        if (req.body.username === "" || req.body.username === undefined) {
+        if (!isPresent(req.body.username)) {
             res.status(400).send("Please include a username.");
             return;
         }
-        if (req.body.email === "" || req.body.email === undefined) {
+        if (!isPresent(req.body.email)) {
             res.status(400).send("Please include an email.");
             return;
         }
-        if (req.body.password === "" || req.body.password === undefined) {
+        if (!isPresent(req.body.password)) {
             res.status(400).send("Please include a password.");
             return;
         }
-        if (req.files.profileImage === undefined) {
+        if (!isPresent(req.body.profileImage)) {
             res.status(400).send("Please include a profile image.");
             return;
         }
