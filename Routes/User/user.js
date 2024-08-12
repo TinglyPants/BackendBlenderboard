@@ -19,6 +19,7 @@ const usersDB = mongoose.createConnection("mongodb://127.0.0.1:27017/usersDB");
 // Gather post schema and make post model
 const userSchema = require("./userSchema");
 const { isPresent } = require("../../Utils/isPresent");
+const { isCorrectLength } = require("../../Utils/isCorrectLength");
 const User = usersDB.model("User", userSchema);
 
 // Allows express to use json and urlencoded data (middleware)
@@ -54,19 +55,19 @@ router.post(
         }
 
         // length checks
-        if (req.body.username.length === 0 || req.body.username.length > 26) {
+        if (!isCorrectLength(req.body.username, 1, 26)) {
             res.status(400).send(
                 "Username is incorrect length (must be 1-26 chars!)"
             );
             return;
         }
-        if (req.body.password.length < 8 || req.body.password.length > 40) {
+        if (!isCorrectLength(req.body.password, 8, 40)) {
             res.status(400).send(
                 "Password is incorrect length (must be 8-40 chars!)"
             );
             return;
         }
-        if (req.body.bio.length > 3000) {
+        if (!isCorrectLength(req.body.bio, 0, 3000)) {
             res.status(400).send("Bio is too long");
             return;
         }
