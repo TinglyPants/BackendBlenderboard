@@ -17,6 +17,24 @@ app.use("/media", mediaRoutes);
 const userRoutes = require("./Routes/User/user");
 app.use("/users", userRoutes);
 
+const errorHandler = (err, req, res, next) => {
+    if (err) {
+        res.status(500).send(
+            "Uh oh, Something went wrong! Please report this as soon as possible to help get the problem solved quickly."
+        );
+        console.log("Error!: ");
+        console.log("---------------------------------------------");
+        console.error(err);
+        console.log("---------------------------------------------");
+        console.log("Request Data:");
+        console.log("---------------------------------------------");
+        console.dir(req);
+        console.log("---------------------------------------------");
+    }
+};
+
+app.use(errorHandler);
+
 // Listen on port 4000
 app.listen(4000, () => {
     console.log("Server listening on port: 4000");
