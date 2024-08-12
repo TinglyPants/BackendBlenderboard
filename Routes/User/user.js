@@ -3,6 +3,12 @@ const express = require("express");
 const router = express.Router();
 // Handles MongoDB
 const mongoose = require("mongoose");
+// Parses multipart form data
+const multer = require("multer");
+const memStorage = multer.memoryStorage();
+const upload = multer({
+    storage: memStorage,
+});
 
 // Mongoose connection
 mongoose.connect("mongodb://127.0.0.1:27017/postsDB");
@@ -21,7 +27,29 @@ router.get("/active", (req, res) => {
 });
 
 // Create
-router.post("/create", (req, res) => {});
+router.post("/create", upload.fields(["profileImage"]), (req, res) => {
+    // presence checks
+    if (req.body.username === undefined) {
+        res.status(400).send("Please include a username.");
+        return;
+    }
+    if (req.body.bio === undefined) {
+        res.status(400).send("Please include a bio.");
+        return;
+    }
+    if (req.body.email === undefined) {
+        res.status(400).send("Please include an email.");
+        return;
+    }
+    if (req.body.password === undefined) {
+        res.status(400).send("Please include a password.");
+        return;
+    }
+    if (req.files.profileImage === undefined) {
+        res.status(400).send("Please include a profile image.");
+        return;
+    }
+});
 
 // Read
 router.get("/read", (req, res) => {});

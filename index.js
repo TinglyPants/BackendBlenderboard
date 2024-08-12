@@ -26,10 +26,10 @@ const errorHandler = (err, req, res, next) => {
         console.log("---------------------------------------------");
         console.error(err);
         console.log("---------------------------------------------");
-        console.log("Request Data:");
-        console.log("---------------------------------------------");
-        console.dir(req);
-        console.log("---------------------------------------------");
+        // console.log("Request Data:");
+        // console.log("---------------------------------------------");
+        // console.dir(req);
+        // console.log("---------------------------------------------");
     }
 };
 
