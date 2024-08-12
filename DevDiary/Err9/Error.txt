@@ -1,0 +1,13 @@
+Here is the problem. This code is absolutely abominable.
+
+Working on this codebase has brought me dread for the past few days because of how poorly managed it has been. That
+changes now. This error will be solved over time as shown in many commits because it is better to handle it that way.
+
+Plans: 
+Generate utility functions to manage repeated tasks
+Extract constants to suitable configuration files
+Improve mongoose connection management
+standardize naming conventions
+clean up unnecessary comments - this is production codebase not a tutorial!
+Refactor individual routes into more files
+Extract file management to media endpoints exclusively (This will help when transitioning from monolith to microservice architecture)
