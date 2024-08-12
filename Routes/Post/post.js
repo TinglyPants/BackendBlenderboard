@@ -11,10 +11,10 @@ const fs = require("fs");
 const { uuid } = require("uuidv4");
 
 // Mongoose connection
-mongoose.connect("mongodb://127.0.0.1:27017/postsDB");
+const postsDB = mongoose.createConnection("mongodb://127.0.0.1:27017/postsDB");
 // Gather post schema and make post model
 const postSchema = require("./postSchema");
-const Post = mongoose.model("Post", postSchema);
+const Post = postsDB.model("Post", postSchema);
 
 // Setting up multer (middleware)
 // Stores files in memory as a buffer

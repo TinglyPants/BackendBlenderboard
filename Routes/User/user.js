@@ -14,11 +14,11 @@ const upload = multer({
 });
 
 // Mongoose connection
-mongoose.connect("mongodb://127.0.0.1:27017/usersDB");
+const usersDB = mongoose.createConnection("mongodb://127.0.0.1:27017/usersDB");
 
 // Gather post schema and make post model
 const userSchema = require("./userSchema");
-const User = mongoose.model("User", userSchema);
+const User = usersDB.model("User", userSchema);
 
 // Allows express to use json and urlencoded data (middleware)
 router.use(express.urlencoded({ extended: true }));
@@ -112,9 +112,9 @@ router.post(
         createdUser.Username = req.body.username;
         createdUser.Bio = req.body.bio;
         createdUser.Email = req.body.email;
-        createdUser.password = hashedAndSaltedPassword;
+        createdUser.Password = hashedAndSaltedPassword;
 
-        createdUser.save();
+        await createdUser.save();
         res.status(200).send("Created User");
     }
 );

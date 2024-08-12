@@ -1,0 +1,9 @@
+Mongoose is not happy with me connecting to multiple databases at once.
+
+Figure1 = error trace
+
+Solution: use a different connection method
+
+Figure2 and Figure3 = code after
+
+All working!
