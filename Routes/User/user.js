@@ -15,12 +15,21 @@ const User = mongoose.model("User", userSchema);
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
 
+// Used to test if user endpoint is available
+router.get("/active", (req, res) => {
+    res.status(200).send("User endpoint active!");
+});
+
+// Create
 router.post("/create", (req, res) => {});
 
+// Read
 router.get("/read", (req, res) => {});
 
+// Update
 router.put("/update", (req, res) => {});
 
+// Delete
 router.delete("/delete", (req, res) => {});
 
 module.exports = router;
