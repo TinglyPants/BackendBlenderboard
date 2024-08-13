@@ -1,6 +1,7 @@
 // Handles HTTP routes
 const express = require("express");
 const router = express.Router();
+const axios = require("axios");
 // Handles MongoDB
 const mongoose = require("mongoose");
 // Parses multipart form data
@@ -26,7 +27,7 @@ const { isValidContent } = require("../../Utils/isValidContent");
 const {
     emailRegex,
     standardAllowedCharRegex,
-} = require("../../Config/regularExpresions");
+} = require("../../Config/regularExpressions");
 const {
     usernameMin,
     usernameMax,
@@ -37,6 +38,8 @@ const {
     passwordMin,
     passwordMax,
 } = require("../../Config/inputLengthBounds");
+const { storeImage } = require("../../Utils/storeMedia");
+const { generateFilename } = require("../../Utils/generateFilename");
 const User = usersDB.model("User", userSchema);
 
 // Allows express to use json and urlencoded data (middleware)
@@ -123,18 +126,25 @@ router.post(
         }
 
         // password hashing + salting
-        // This dictates the number of hash iterations. Higher = more secure but increased computation time
-        const saltRounds = 10;
         const hashedAndSaltedPassword = await bcrypt.hash(
             req.body.password,
-            saltRounds
+            10
         );
+
+        // Image saving
+        const newFilename = generateFilename(
+            req.files.profileImage[0].originalname
+        );
+        if (!storeImage(req.files.profileImage[0].buffer, newFilename)) {
+            res.status(500).send("Error saving file. Please try again");
+        }
 
         const createdUser = new User();
         createdUser.Username = req.body.username;
         createdUser.Bio = req.body.bio;
         createdUser.Email = req.body.email;
         createdUser.Password = hashedAndSaltedPassword;
+        createdUser.ProfileImage = newFilename;
 
         await createdUser.save();
         res.status(200).send("Created User");

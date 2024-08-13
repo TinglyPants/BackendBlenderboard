@@ -6,6 +6,12 @@ const path = require("path");
 const fs = require("fs");
 const { isUuid } = require("uuidv4");
 
+const multer = require("multer");
+const memStorage = multer.memoryStorage();
+const upload = multer({
+    storage: memStorage,
+});
+
 router.get("/image/:imageID", (req, res) => {
     if (!isUuid(path.parse(req.params.imageID).name)) {
         // If invalid UUID, reject
@@ -43,5 +49,29 @@ router.get("/video/:videoID", (req, res) => {
         res.send("No file found.");
     }
 });
+
+router.post(
+    "/image/create/:filename",
+    upload.fields([{ name: "image" }]),
+    async (req, res) => {
+        fs.writeFile(
+            path.join(
+                __dirname,
+                "../../mediaStorage/image/",
+                req.params.filename
+            ),
+            req.files.image[0].buffer,
+            (err) => {
+                if (err) {
+                    res.status(500).send("Something went wrong saving file!");
+                } else {
+                    res.status(200).send("All good!");
+                }
+            }
+        );
+    }
+);
+
+router.post("/video/create", (req, res) => {});
 
 module.exports = router;
