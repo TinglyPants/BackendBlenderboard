@@ -9,9 +9,10 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const { uuid } = require("uuidv4");
+const { postDatabaseUrl } = require("../../Config/databaseUrls");
 
 // Mongoose connection
-const postsDB = mongoose.createConnection("mongodb://127.0.0.1:27017/postsDB");
+const postsDB = mongoose.createConnection(postDatabaseUrl);
 // Gather post schema and make post model
 const postSchema = require("./postSchema");
 const { isPresent } = require("../../Utils/isPresent");

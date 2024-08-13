@@ -13,8 +13,10 @@ const upload = multer({
     storage: memStorage,
 });
 
+const { userDatabaseUrl } = require("../../Config/databaseUrls");
+
 // Mongoose connection
-const usersDB = mongoose.createConnection("mongodb://127.0.0.1:27017/usersDB");
+const usersDB = mongoose.createConnection(userDatabaseUrl);
 
 // Gather post schema and make post model
 const userSchema = require("./userSchema");
