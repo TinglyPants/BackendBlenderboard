@@ -16,6 +16,12 @@ const postsDB = mongoose.createConnection("mongodb://127.0.0.1:27017/postsDB");
 const postSchema = require("./postSchema");
 const { isPresent } = require("../../Utils/isPresent");
 const { isCorrectLength } = require("../../Utils/isCorrectLength");
+const {
+    titleMin,
+    titleMax,
+    descriptionMin,
+    descriptionMax,
+} = require("../../Config/inputLengthBounds");
 const Post = postsDB.model("Post", postSchema);
 
 // Setting up multer (middleware)
@@ -103,7 +109,7 @@ router.post(
             res.status(400).send("Please include a title.");
             return;
         }
-        if (!isCorrectLength(req.body.title, 0, 120)) {
+        if (!isCorrectLength(req.body.title, titleMin, titleMax)) {
             res.status(400).send("Your title is too big!");
             return;
         }
@@ -113,7 +119,13 @@ router.post(
             res.status(400).send("Please include a description.");
             return;
         }
-        if (!isCorrectLength(req.body.description, 0, 3000)) {
+        if (
+            !isCorrectLength(
+                req.body.description,
+                descriptionMin,
+                descriptionMax
+            )
+        ) {
             res.status(400).send("Your description is too big!");
             return;
         }

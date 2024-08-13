@@ -25,6 +25,16 @@ const {
     emailRegex,
     standardAllowedCharRegex,
 } = require("../../Config/regularExpresions");
+const {
+    usernameMin,
+    usernameMax,
+    bioMin,
+    bioMax,
+    emailMin,
+    emailMax,
+    passwordMin,
+    passwordMax,
+} = require("../../Config/inputLengthBounds");
 const User = usersDB.model("User", userSchema);
 
 // Allows express to use json and urlencoded data (middleware)
@@ -60,19 +70,25 @@ router.post(
         }
 
         // length checks
-        if (!isCorrectLength(req.body.username, 1, 26)) {
+        if (!isCorrectLength(req.body.username, usernameMin, usernameMax)) {
             res.status(400).send(
                 "Username is incorrect length (must be 1-26 chars!)"
             );
             return;
         }
-        if (!isCorrectLength(req.body.password, 8, 40)) {
+        if (!isCorrectLength(req.body.email, emailMin, emailMax)) {
+            res.status(400).send(
+                "Email is incorrect length (must be 3-320 chars!)"
+            );
+            return;
+        }
+        if (!isCorrectLength(req.body.password, passwordMin, passwordMax)) {
             res.status(400).send(
                 "Password is incorrect length (must be 8-40 chars!)"
             );
             return;
         }
-        if (!isCorrectLength(req.body.bio, 0, 3000)) {
+        if (!isCorrectLength(req.body.bio, bioMin, bioMax)) {
             res.status(400).send("Bio is too long");
             return;
         }
