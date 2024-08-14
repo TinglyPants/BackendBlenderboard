@@ -105,19 +105,20 @@ const create = async (req, res) => {
         }
     }
 
-    const createdPost = new Post();
-
-    createdPost.Title = req.body.title;
-    createdPost.Description = req.body.description;
-    createdPost.Author = null; // to be added in later prototype
-    createdPost.Score = 0; // to be added in later prototype
-    createdPost.DateOfCreation = Date.now();
+    const createdPost = new Post({
+        Title: req.body.title,
+        Description: req.body.description,
+        Author: null, // to be added in later prototype
+        Score: 0, // to be added in later prototype
+        DateOfCreation: Date.now(),
+    });
 
     // Media storage
     if (isPresent(req.files.images)) {
         for (let i = 0; i < req.files.images.length; i++) {
             const image = req.files.images[i];
             const newFilename = generateFilename(image.originalname);
+
             if (!storeImage(image.buffer, newFilename)) {
                 res.status(500).send("Error saving file. Please try again");
                 return;

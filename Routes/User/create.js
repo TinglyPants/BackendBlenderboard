@@ -14,6 +14,7 @@ const { isCorrectLength } = require("../../Utils/isCorrectLength");
 const { isValidContent } = require("../../Utils/isValidContent");
 const { storeImage } = require("../../Utils/storeMedia");
 const { generateFilename } = require("../../Utils/generateFilename");
+const { isValidImage } = require("../../Utils/isValidMedia");
 
 // Load config
 const {
@@ -30,10 +31,11 @@ const {
     passwordMin,
     passwordMax,
 } = require("../../Config/inputLengthBounds");
-const { isValidImage } = require("../../Utils/isValidMedia");
+
+// TODO: Definitely need to reduce the repetition in these endpoints... Later I will. Otherwise this is OK.
 
 const create = async (req, res) => {
-    // presence checks
+    // Presence checks
     if (!isPresent(req.body.username)) {
         res.status(400).send("Please include a username.");
         return;
@@ -51,7 +53,7 @@ const create = async (req, res) => {
         return;
     }
 
-    // length checks
+    // Length checks
     if (!isCorrectLength(req.body.username, usernameMin, usernameMax)) {
         res.status(400).send(
             "Username is incorrect length (must be 1-26 chars!)"
@@ -75,7 +77,7 @@ const create = async (req, res) => {
         return;
     }
 
-    // content checks
+    // Content checks
     if (!isValidContent(req.body.email, emailRegex)) {
         res.status(400).send("Please use a valid email address");
         return;
@@ -103,13 +105,13 @@ const create = async (req, res) => {
         return;
     }
 
-    // existence check
+    // Existence check
     if ((await User.findOne({ Email: req.body.email }).exec()) !== null) {
         res.status(400).send("User with that email already exists!");
         return;
     }
 
-    // password hashing + salting
+    // Password hashing + salting
     const hashedAndSaltedPassword = await bcrypt.hash(req.body.password, 10);
 
     // Image saving
@@ -120,12 +122,13 @@ const create = async (req, res) => {
         res.status(500).send("Error saving file. Please try again");
     }
 
-    const createdUser = new User();
-    createdUser.Username = req.body.username;
-    createdUser.Bio = req.body.bio;
-    createdUser.Email = req.body.email;
-    createdUser.Password = hashedAndSaltedPassword;
-    createdUser.ProfileImage = newFilename;
+    const createdUser = new User({
+        Username: req.body.username,
+        Bio: req.body.bio,
+        Email: req.body.email,
+        Password: hashedAndSaltedPassword,
+        ProfileImage: newFilename,
+    });
 
     await createdUser.save();
     res.status(200).send("Created User");
