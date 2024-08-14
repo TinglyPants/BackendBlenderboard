@@ -5,6 +5,7 @@ const postsDB = mongoose.createConnection(postDatabaseUrl);
 const postSchema = require("./postSchema");
 const Post = postsDB.model("Post", postSchema);
 
+// Loading utils
 const { generateFilename } = require("../../Utils/generateFilename");
 const { isPresent } = require("../../Utils/isPresent");
 const { isCorrectLength } = require("../../Utils/isCorrectLength");
@@ -18,6 +19,8 @@ const {
     storeVideo,
     storeModel,
 } = require("../../Utils/storeMedia");
+
+// Loading config
 const {
     titleMin,
     titleMax,
@@ -25,8 +28,10 @@ const {
     descriptionMax,
 } = require("../../Config/inputLengthBounds");
 
+// TODO: Reduce the repetition in checks by adding some functions.
+
 const create = async (req, res) => {
-    // presence checks
+    // Presence checks
     if (!isPresent(req.body.title)) {
         res.status(400).send("Please include a title.");
         return;
@@ -40,7 +45,7 @@ const create = async (req, res) => {
         return;
     }
 
-    // length checks
+    // Length checks
     if (!isCorrectLength(req.body.title, titleMin, titleMax)) {
         res.status(400).send("Your title is too big!");
         return;
@@ -72,7 +77,7 @@ const create = async (req, res) => {
         }
     }
 
-    // File validation
+    // Media validation
     if (isPresent(req.files.images)) {
         for (let i = 0; i < req.files.images.length; i++) {
             if (!isValidImage(req.files.images[i])) {
@@ -83,7 +88,6 @@ const create = async (req, res) => {
             }
         }
     }
-
     if (isPresent(req.files.video)) {
         if (!isValidVideo(req.files.video[0])) {
             res.status(400).send(
@@ -92,7 +96,6 @@ const create = async (req, res) => {
             return;
         }
     }
-
     if (isPresent(req.files.model)) {
         if (!isValidModel(req.files.model[0])) {
             res.status(400).send(
@@ -102,7 +105,6 @@ const create = async (req, res) => {
         }
     }
 
-    // Create new instance of Post model to be saved in database
     const createdPost = new Post();
 
     createdPost.Title = req.body.title;
@@ -111,7 +113,7 @@ const create = async (req, res) => {
     createdPost.Score = 0; // to be added in later prototype
     createdPost.DateOfCreation = Date.now();
 
-    // File storage
+    // Media storage
     if (isPresent(req.files.images)) {
         for (let i = 0; i < req.files.images.length; i++) {
             const image = req.files.images[i];
@@ -122,7 +124,6 @@ const create = async (req, res) => {
             } else createdPost.Images.push(newFilename);
         }
     }
-
     if (isPresent(req.files.video)) {
         const newFilename = generateFilename(req.files.video[0].originalname);
         if (!storeVideo(req.files.video[0].buffer, newFilename)) {
@@ -130,7 +131,6 @@ const create = async (req, res) => {
             return;
         } else createdPost.Video = newFilename;
     }
-
     if (isPresent(req.files.model)) {
         const newFilename = generateFilename(req.files.model[0].originalname);
         if (!storeModel(req.files.model[0].buffer, newFilename)) {
@@ -140,8 +140,7 @@ const create = async (req, res) => {
     }
 
     createdPost.Comments.push(null); // to be added in later prototype
-
-    createdPost.save();
+    await createdPost.save();
 
     res.status(200).send("Successful post creation");
 };

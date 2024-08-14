@@ -6,7 +6,7 @@ const postSchema = require("./postSchema");
 const Post = postsDB.model("Post", postSchema);
 
 const homepage = async (req, res) => {
-    // 10 most recent posts.
+    // 10 most recent posts
     const posts = await Post.find()
         .sort({ DateOfCreation: "desc" })
         .limit(10)
@@ -16,7 +16,7 @@ const homepage = async (req, res) => {
     posts.forEach((post) => {
         postIDArray.push(post._id.toString());
     });
-    console.log(postIDArray);
+
     res.send(postIDArray);
 };
 
