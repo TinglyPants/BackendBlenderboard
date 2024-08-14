@@ -50,6 +50,25 @@ router.get("/video/:videoID", (req, res) => {
     }
 });
 
+router.get("/model/:modelID", (req, res) => {
+    if (!isUuid(path.parse(req.params.modelID).name)) {
+        // If invalid UUID, reject
+        res.status(400).send("Invalid filename");
+        return;
+    }
+    const searchPath = path.join(
+        __dirname,
+        "../../mediaStorage/model",
+        req.params.modelID
+    );
+    // Check if file exists first
+    if (fs.existsSync(searchPath)) {
+        res.sendFile(searchPath);
+    } else {
+        res.send("No file found.");
+    }
+});
+
 router.post(
     "/image/create/:filename",
     upload.fields([{ name: "image" }]),
@@ -72,6 +91,48 @@ router.post(
     }
 );
 
-router.post("/video/create", (req, res) => {});
+router.post(
+    "/video/create/:filename",
+    upload.fields([{ name: "video" }]),
+    async (req, res) => {
+        fs.writeFile(
+            path.join(
+                __dirname,
+                "../../mediaStorage/video/",
+                req.params.filename
+            ),
+            req.files.video[0].buffer,
+            (err) => {
+                if (err) {
+                    res.status(500).send("Something went wrong saving file!");
+                } else {
+                    res.status(200).send("All good!");
+                }
+            }
+        );
+    }
+);
+
+router.post(
+    "/model/create/:filename",
+    upload.fields([{ name: "model" }]),
+    async (req, res) => {
+        fs.writeFile(
+            path.join(
+                __dirname,
+                "../../mediaStorage/model/",
+                req.params.filename
+            ),
+            req.files.model[0].buffer,
+            (err) => {
+                if (err) {
+                    res.status(500).send("Something went wrong saving file!");
+                } else {
+                    res.status(200).send("All good!");
+                }
+            }
+        );
+    }
+);
 
 module.exports = router;

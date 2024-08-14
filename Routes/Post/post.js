@@ -5,24 +5,13 @@ const router = express.Router();
 const mongoose = require("mongoose");
 // Parses multipart form data
 const multer = require("multer");
-// Node filesystem handling
-const path = require("path");
-const fs = require("fs");
-const { uuid } = require("uuidv4");
-const { postDatabaseUrl } = require("../../Config/databaseUrls");
 
+const { create } = require("./create");
+const { postDatabaseUrl } = require("../../Config/databaseUrls");
 // Mongoose connection
 const postsDB = mongoose.createConnection(postDatabaseUrl);
 // Gather post schema and make post model
 const postSchema = require("./postSchema");
-const { isPresent } = require("../../Utils/isPresent");
-const { isCorrectLength } = require("../../Utils/isCorrectLength");
-const {
-    titleMin,
-    titleMax,
-    descriptionMin,
-    descriptionMax,
-} = require("../../Config/inputLengthBounds");
 const Post = postsDB.model("Post", postSchema);
 
 // Setting up multer (middleware)
@@ -101,135 +90,7 @@ router.post(
     "/create",
     // upload middleware retrieves all files
     upload.fields([{ name: "images" }, { name: "video" }, { name: "model" }]),
-    (req, res) => {
-        // Create new instance of Post model to be saved in database
-        const createdPost = new Post();
-
-        // Guard clauses for title
-        if (!isPresent(req.body.title)) {
-            res.status(400).send("Please include a title.");
-            return;
-        }
-        if (!isCorrectLength(req.body.title, titleMin, titleMax)) {
-            res.status(400).send("Your title is too big!");
-            return;
-        }
-
-        // Guard clauses for description
-        if (!isPresent(req.body.description)) {
-            res.status(400).send("Please include a description.");
-            return;
-        }
-        if (
-            !isCorrectLength(
-                req.body.description,
-                descriptionMin,
-                descriptionMax
-            )
-        ) {
-            res.status(400).send("Your description is too big!");
-            return;
-        }
-
-        // Media presence check, ensures at least one image or one video
-        if (!isPresent(req.files.images) && !isPresent(req.files.video)) {
-            res.status(400).send("You must include media!");
-            return;
-        }
-
-        // Media count checks
-        if (isPresent(req.files.images)) {
-            if (req.files.images.length > 12) {
-                res.status(400).send("Too many images!");
-                return;
-            }
-        }
-
-        if (isPresent(req.files.video)) {
-            if (req.files.video.length > 1) {
-                res.status(400).send("Too many videos!");
-                return;
-            }
-        }
-
-        if (isPresent(req.files.model)) {
-            if (req.files.model.length > 1) {
-                res.status(400).send("Too many models!");
-                return;
-            }
-        }
-
-        createdPost.Title = req.body.title;
-        createdPost.Description = req.body.description;
-        createdPost.Author = null; // to be added in later prototype
-        createdPost.Score = 0; // to be added in later prototype
-        createdPost.DateOfCreation = Date.now();
-
-        // File handling
-        if (req.files.images) {
-            req.files.images.forEach((image) => {
-                const newFileName = uuid() + path.extname(image.originalname);
-
-                createdPost.Images.push(newFileName);
-
-                const filePath = path.join(
-                    __dirname,
-                    "../../mediaStorage/image",
-                    newFileName
-                );
-
-                fs.writeFile(filePath, image.buffer, (err) => {
-                    if (err) {
-                        console.log("Error saving image:" + err);
-                    }
-                });
-            });
-        }
-
-        if (req.files.video) {
-            const newFileName =
-                uuid() + path.extname(req.files.video[0].originalname);
-
-            createdPost.Video = newFileName;
-
-            const filePath = path.join(
-                __dirname,
-                "../../mediaStorage/video",
-                newFileName
-            );
-
-            fs.writeFile(filePath, req.files.video[0].buffer, (err) => {
-                if (err) {
-                    console.log("Error saving video:" + err);
-                }
-            });
-        }
-
-        if (req.files.model) {
-            const newFileName =
-                uuid() + path.extname(req.files.model[0].originalname);
-
-            createdPost.Model = newFileName;
-
-            const filePath = path.join(
-                __dirname,
-                "../../mediaStorage/model",
-                newFileName
-            );
-
-            fs.writeFile(filePath, req.files.model[0].buffer, (err) => {
-                if (err) {
-                    console.log("Error saving model:" + err);
-                }
-            });
-        }
-
-        createdPost.Comments.push(null); // to be added in later prototype
-
-        createdPost.save();
-
-        res.status(200).send({ success: true });
-    }
+    create
 );
 
 // Read
