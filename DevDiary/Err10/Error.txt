@@ -1,0 +1,20 @@
+Problem: How do I make json web tokens and send them out for authentication?
+Solution: dotenv and jsonwebtoken libraries
+
+in the .env file is a secret token to secure my json web tokens. I will not be showing them anywhere for security reasons,
+but here is a screenshot of what it would look like:
+
+Figure1
+
+Okay thats not too bad. What do I need now?
+
+Ill need to send a jwt when a user is created (sign up)
+Ill need to send a jwt when a user logs in
+Ill need to make middleware to handle authentication
+
+Now, it is often considered best practice to have access tokens and refresh tokens
+handled as different things. However, I will only be using access tokens for now.
+When I convert my project into a microservice architecture later I will handle refresh
+tokens as part of the API gateway.
+
+Im not messing around with screenshots anymore unless needed, so check git commit history for stuff.

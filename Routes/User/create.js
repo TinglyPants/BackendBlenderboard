@@ -31,6 +31,7 @@ const {
     passwordMin,
     passwordMax,
 } = require("../../Config/inputLengthBounds");
+const { generateToken } = require("../../Utils/generateToken");
 
 // TODO: Definitely need to reduce the repetition in these endpoints... Later I will. Otherwise this is OK.
 
@@ -128,10 +129,21 @@ const create = async (req, res) => {
         Email: req.body.email,
         Password: hashedAndSaltedPassword,
         ProfileImage: newFilename,
+        DateOfCreation: Date.now(),
     });
 
     await createdUser.save();
-    res.status(200).send("Created User");
+    res.status(200).json({
+        accessToken: generateToken({
+            Username: req.body.username,
+            Bio: req.body.bio,
+            Email: req.body.email,
+            Password: hashedAndSaltedPassword,
+            ProfileImage: newFilename,
+            DateOfCreation: createdUser.DateOfCreation,
+            _id: createdUser._id,
+        }),
+    });
 };
 
 module.exports = { create };

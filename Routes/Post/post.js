@@ -9,6 +9,9 @@ const upload = multer({ storage: memStorage });
 const { create } = require("./create");
 const { read } = require("./read");
 const { homepage } = require("./homepage");
+const {
+    requiresAuth,
+} = require("../../Middleware/Authentication/requiresAuth");
 
 router.use(express.json());
 
@@ -20,6 +23,7 @@ router.post(
     "/create",
     // Upload middleware retrieves all files
     upload.fields([{ name: "images" }, { name: "video" }, { name: "model" }]),
+    requiresAuth,
     create
 );
 

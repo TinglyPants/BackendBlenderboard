@@ -3,3 +3,4 @@ package-lock.json
 mediaStorage/image/*
 mediaStorage/video/*
 mediaStorage/model/*
+.env
