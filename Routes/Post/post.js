@@ -1,21 +1,8 @@
 // Handles HTTP routes
 const express = require("express");
 const router = express.Router();
-// Handles MongoDB
-const mongoose = require("mongoose");
 // Parses multipart form data
 const multer = require("multer");
-
-const { create } = require("./create");
-const { read } = require("./read");
-const { postDatabaseUrl } = require("../../Config/databaseUrls");
-// Mongoose connection
-const postsDB = mongoose.createConnection(postDatabaseUrl);
-// Gather post schema and make post model
-const postSchema = require("./postSchema");
-const { homepage } = require("./homepage");
-const Post = postsDB.model("Post", postSchema);
-
 // Setting up multer (middleware)
 // Stores files in memory as a buffer
 const memStorage = multer.memoryStorage();
@@ -78,6 +65,11 @@ const upload = multer({
     },
 });
 
+// loading endpoints
+const { create } = require("./create");
+const { read } = require("./read");
+const { homepage } = require("./homepage");
+
 // Allows express to use json and urlencoded data (middleware)
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
@@ -107,24 +99,7 @@ router.put("/update", (req, res) => {
 
 // Delete
 router.delete("/delete/:postID", (req, res) => {
-    // Wrapped in async IIFE for error handling
-    (async () => {
-        try {
-            const requestedID = req.params.postID;
-            const result = await Post.deleteOne({
-                _id: new mongoose.Types.ObjectId(requestedID),
-            });
-
-            if (result.deletedCount > 0) {
-                res.status(200).send("Successfully deleted");
-            } else {
-                res.status(404).send("Post not found");
-            }
-        } catch (err) {
-            // Post.deleteOne threw a BSON error
-            res.status(400).send("Invalid ID");
-        }
-    })();
+    res.status(501).send("Not Implemented");
 });
 
 module.exports = router;
