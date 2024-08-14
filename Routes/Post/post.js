@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 const multer = require("multer");
 
 const { create } = require("./create");
+const { read } = require("./read");
 const { postDatabaseUrl } = require("../../Config/databaseUrls");
 // Mongoose connection
 const postsDB = mongoose.createConnection(postDatabaseUrl);
@@ -94,34 +95,7 @@ router.post(
 );
 
 // Read
-router.get("/read/:postID", (req, res) => {
-    // Wrapped in async IIFE for error handling
-    (async () => {
-        try {
-            const requestedID = req.params.postID;
-            const requestedPost = await Post.findById(requestedID).exec();
-
-            if (requestedPost === null) {
-                res.status(404).send("Not Found");
-            } else {
-                const requestedPostObj = {
-                    title: requestedPost.Title,
-                    description: requestedPost.Description,
-                    author: requestedPost.Author,
-                    score: requestedPost.Score,
-                    dateOfCreation: requestedPost.DateOfCreation,
-                    images: requestedPost.Images,
-                    video: requestedPost.Video,
-                    model: requestedPost.Model,
-                    comments: requestedPost.Comments,
-                };
-                res.status(200).send(requestedPostObj);
-            }
-        } catch (err) {
-            res.status(400).send("Invalid ID");
-        }
-    })();
-});
+router.get("/read/:postID", read);
 
 router.get("/homepage", (req, res) => {
     // Gather list of given post IDs sorted by post date and send back
