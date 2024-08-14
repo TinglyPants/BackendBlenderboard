@@ -55,7 +55,6 @@ const login = async (req, res) => {
                 Username: searchedUser.Username,
                 Bio: searchedUser.Bio,
                 Email: searchedUser.Email,
-                Password: searchedUser.Password,
                 ProfileImage: searchedUser.ProfileImage,
                 DateOfCreation: searchedUser.DateOfCreation,
                 _id: searchedUser._id,

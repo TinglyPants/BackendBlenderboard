@@ -121,6 +121,7 @@ const create = async (req, res) => {
     );
     if (!storeImage(req.files.profileImage[0].buffer, newFilename)) {
         res.status(500).send("Error saving file. Please try again");
+        return;
     }
 
     const createdUser = new User({
@@ -138,7 +139,6 @@ const create = async (req, res) => {
             Username: req.body.username,
             Bio: req.body.bio,
             Email: req.body.email,
-            Password: hashedAndSaltedPassword,
             ProfileImage: newFilename,
             DateOfCreation: createdUser.DateOfCreation,
             _id: createdUser._id,
