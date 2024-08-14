@@ -9,6 +9,11 @@ const { generateFilename } = require("../../Utils/generateFilename");
 const { isPresent } = require("../../Utils/isPresent");
 const { isCorrectLength } = require("../../Utils/isCorrectLength");
 const {
+    isValidImage,
+    isValidVideo,
+    isValidModel,
+} = require("../../Utils/isValidMedia");
+const {
     storeImage,
     storeVideo,
     storeModel,
@@ -67,6 +72,36 @@ const create = async (req, res) => {
         }
     }
 
+    // File validation
+    if (isPresent(req.files.images)) {
+        for (let i = 0; i < req.files.images.length; i++) {
+            if (!isValidImage(req.files.images[i])) {
+                res.status(400).send(
+                    "Invalid image file: " + req.files.images[i].originalname
+                );
+                return;
+            }
+        }
+    }
+
+    if (isPresent(req.files.video)) {
+        if (!isValidVideo(req.files.video[0])) {
+            res.status(400).send(
+                "Invalid video file: " + req.files.video[0].originalname
+            );
+            return;
+        }
+    }
+
+    if (isPresent(req.files.model)) {
+        if (!isValidModel(req.files.model[0])) {
+            res.status(400).send(
+                "Invalid model file: " + req.files.model[0].originalname
+            );
+            return;
+        }
+    }
+
     // Create new instance of Post model to be saved in database
     const createdPost = new Post();
 
@@ -76,8 +111,8 @@ const create = async (req, res) => {
     createdPost.Score = 0; // to be added in later prototype
     createdPost.DateOfCreation = Date.now();
 
-    // File handling
-    if (req.files.images) {
+    // File storage
+    if (isPresent(req.files.images)) {
         for (let i = 0; i < req.files.images.length; i++) {
             const image = req.files.images[i];
             const newFilename = generateFilename(image.originalname);
@@ -88,7 +123,7 @@ const create = async (req, res) => {
         }
     }
 
-    if (req.files.video) {
+    if (isPresent(req.files.video)) {
         const newFilename = generateFilename(req.files.video[0].originalname);
         if (!storeVideo(req.files.video[0].buffer, newFilename)) {
             res.status(500).send("Error saving file. Please try again");
@@ -96,7 +131,7 @@ const create = async (req, res) => {
         } else createdPost.Video = newFilename;
     }
 
-    if (req.files.model) {
+    if (isPresent(req.files.model)) {
         const newFilename = generateFilename(req.files.model[0].originalname);
         if (!storeModel(req.files.model[0].buffer, newFilename)) {
             res.status(500).send("Error saving file. Please try again");

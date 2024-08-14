@@ -3,67 +3,8 @@ const express = require("express");
 const router = express.Router();
 // Parses multipart form data
 const multer = require("multer");
-// Setting up multer (middleware)
-// Stores files in memory as a buffer
 const memStorage = multer.memoryStorage();
-
-const isValidFile = (allowedMimeTypes, filenameRegex, file) => {
-    if (allowedMimeTypes !== null) {
-        // if mimetype invalid, reject file
-        if (!allowedMimeTypes.includes(file.mimetype)) {
-            return false;
-        }
-    }
-
-    // if filename invalid, reject file
-    if (!filenameRegex.test(file.originalname.toLowerCase())) {
-        return false;
-    }
-
-    // all good, therefore can allow through
-    return true;
-};
-
-const upload = multer({
-    storage: memStorage,
-    // function to filter invalid files appropriately
-    fileFilter: (req, file, cb) => {
-        switch (file.fieldname) {
-            case "images":
-                // image file filtering
-                return cb(
-                    null,
-                    isValidFile(
-                        ["image/png", "image/jpeg", "image/gif", "image/webp"],
-                        /(.png|.jpg|.jpeg|.gif|.webp)$/,
-                        file
-                    )
-                );
-                break;
-            case "video":
-                // video file filtering
-                return cb(
-                    null,
-                    isValidFile(
-                        ["video/mp4", "video/webm", "video/ogg"],
-                        /(.mp4|.webm|.ogg)$/,
-                        file
-                    )
-                );
-                break;
-            case "model":
-                // model file filtering
-                return cb(
-                    null,
-                    isValidFile(null, /(.obj|.fbx|.stl|.gltf|.glb|.dae)$/, file)
-                );
-                break;
-            default:
-                return cb(null, false);
-                break;
-        }
-    },
-});
+const upload = multer({ storage: memStorage });
 
 // loading endpoints
 const { create } = require("./create");
