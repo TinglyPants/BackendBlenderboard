@@ -11,3 +11,25 @@ standardize naming conventions
 clean up unnecessary comments - this is production codebase not a tutorial!
 Refactor individual routes into more files
 Extract file management to media endpoints exclusively (This will help when transitioning from monolith to microservice architecture)
+
+Some notes on good vs bad comments:
+Its best to avoid comments if you can. Often comments can be replaced by having descriptive function and variable names.
+But why are comments bad?:
+Comments are not seen by IDEs
+Comments often take longer to read than the thing they are explaining
+Comments are often used as an excuse for bad code. Dont write comments, write better code.
+Comments can be misleading. When refactoring code, people often forget the comments. This leaves old comments
+in the code that could be misleading.
+Commented out code is sometimes left where it could be removed. Other programmers will nto remove it as they 
+think it could be important. Instead of leaving commented out code, leverage the modern version control from
+git and github!
+Position markers must be used sparingly, else they become useless noise.
+
+Where should comments be used?
+Comments should explain *why* the code is done that way (if not obvious), rather than what it does. The code 
+itself tells us that.
+Comments can explain required formats for inputs for example, something the code itself may not make obvious.
+Comments can be used to explain intent for certain code.
+Comments can be used to warn others not to change code or what happens if they do.
+TODO comments are fine, as long as they are removed.
+Comments can be used to amplify the importance of certain functions if not immediately obvious.
