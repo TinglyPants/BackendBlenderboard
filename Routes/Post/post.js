@@ -13,6 +13,7 @@ const { postDatabaseUrl } = require("../../Config/databaseUrls");
 const postsDB = mongoose.createConnection(postDatabaseUrl);
 // Gather post schema and make post model
 const postSchema = require("./postSchema");
+const { homepage } = require("./homepage");
 const Post = postsDB.model("Post", postSchema);
 
 // Setting up multer (middleware)
@@ -97,23 +98,7 @@ router.post(
 // Read
 router.get("/read/:postID", read);
 
-router.get("/homepage", (req, res) => {
-    // Gather list of given post IDs sorted by post date and send back
-    (async () => {
-        // 10 most recent posts.
-        const posts = await Post.find()
-            .sort({ DateOfCreation: "desc" })
-            .limit(10)
-            .exec();
-
-        const postIDArray = [];
-        posts.forEach((post) => {
-            postIDArray.push(post._id.toString());
-        });
-        console.log(postIDArray);
-        res.send(postIDArray);
-    })();
-});
+router.get("/homepage", homepage);
 
 // Update
 router.put("/update", (req, res) => {
