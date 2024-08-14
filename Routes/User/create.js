@@ -30,6 +30,7 @@ const {
     passwordMin,
     passwordMax,
 } = require("../../Config/inputLengthBounds");
+const { isValidImage } = require("../../Utils/isValidMedia");
 
 const create = async (req, res) => {
     // presence checks
@@ -92,6 +93,13 @@ const create = async (req, res) => {
         !isValidContent(req.body.bio, standardAllowedCharRegex)
     ) {
         res.status(400).send("Invalid characters detected in bio!");
+        return;
+    }
+    if (!isValidImage(req.files.profileImage[0])) {
+        res.status(400).send(
+            "Invalid profile image file: " +
+                req.files.profileImage[0].originalname
+        );
         return;
     }
 
