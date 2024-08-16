@@ -11,6 +11,7 @@ const bcrypt = require("bcrypt");
 // Load utils
 const { isPresent } = require("../../Utils/isPresent");
 const { isValidContent } = require("../../Utils/isValidContent");
+const { generateToken } = require("../../Utils/generateToken");
 
 // Load config
 const {
@@ -46,6 +47,7 @@ const login = async (req, res) => {
 
     if (!isPresent(searchedUser)) {
         res.status(404).send("No user found with that email.");
+        return;
     }
 
     // Check password
