@@ -108,7 +108,7 @@ const create = async (req, res) => {
     const createdPost = new Post({
         Title: req.body.title,
         Description: req.body.description,
-        Author: mongoose.Types.ObjectId(req.user._id),
+        Author: new mongoose.Types.ObjectId(req.user._id),
         Score: 0, // to be added in later prototype
         DateOfCreation: Date.now(),
     });
