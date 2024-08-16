@@ -3,7 +3,8 @@ const { isPresent } = require("../../Utils/isPresent");
 const jwt = require("jsonwebtoken");
 
 const requiresAuth = (req, res, next) => {
-    if (!isPresent(req.body.accessToken)) {
+    // Strange case where accessToken is sent as string "null"
+    if (!isPresent(req.body.accessToken) || req.body.accessToken === "null") {
         res.status(401).send("You must log in or sign up!");
         return;
     }
