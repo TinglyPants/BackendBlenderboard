@@ -28,7 +28,7 @@ router.post("/create", upload.fields([{ name: "profileImage" }]), create);
 // Read
 router.get("/read", (req, res) => {});
 
-router.get(
+router.post(
     "/login",
     // upload.none() because no files but uses formData
     upload.none(),
