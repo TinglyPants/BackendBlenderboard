@@ -12,6 +12,7 @@ const upload = multer({
 // Loading endpoints
 const { create } = require("./create");
 const { login } = require("./login");
+const { read } = require("./read");
 
 // Allows express to use json and urlencoded data (middleware)
 router.use(express.urlencoded({ extended: true }));
@@ -26,7 +27,7 @@ router.get("/active", (req, res) => {
 router.post("/create", upload.fields([{ name: "profileImage" }]), create);
 
 // Read
-router.get("/read", (req, res) => {});
+router.get("/read/:userID", read);
 
 router.post(
     "/login",
