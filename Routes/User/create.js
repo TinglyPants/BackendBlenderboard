@@ -20,6 +20,7 @@ const { isValidImage } = require("../../Utils/isValidMedia");
 const {
     emailRegex,
     standardAllowedCharRegex,
+    passwordRegex,
 } = require("../../Config/regularExpressions");
 const {
     usernameMin,
@@ -102,6 +103,12 @@ const create = async (req, res) => {
         res.status(400).send(
             "Invalid profile image file: " +
                 req.files.profileImage[0].originalname
+        );
+        return;
+    }
+    if (!isValidContent(req.body.password, passwordRegex)) {
+        res.status(400).send(
+            "Password must contain at least one capital letter and one number"
         );
         return;
     }
