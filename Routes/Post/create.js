@@ -139,6 +139,20 @@ const create = async (req, res) => {
         }
     }
 
+    // Mesh validation
+    if (isPresent(req.files.mesh)) {
+        if (req.files.mesh.length > 1) {
+            res.status(400).send("Too many meshes!");
+            return;
+        }
+        if (!isValidModel(req.files.mesh[0])) {
+            res.status(400).send(
+                "Invalid mesh file: " + req.files.mesh[0].originalname
+            );
+            return;
+        }
+    }
+
     const createdPost = new Post({
         Title: req.body.title,
         Description: req.body.description,
