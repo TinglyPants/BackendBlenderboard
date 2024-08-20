@@ -19,6 +19,8 @@ const {
     storeImage,
     storeVideo,
     storeModel,
+    storeMap,
+    storeMesh,
 } = require("../../Utils/storeMedia");
 
 // Loading config
@@ -160,6 +162,46 @@ const create = async (req, res) => {
         Score: 0, // to be added in later prototype
         DateOfCreation: Date.now(),
     });
+
+    // Model storage
+    if (isPresent(req.files.mesh)) {
+        for (const mapKey of mapKeys) {
+            if (isPresent(req.files[mapKey])) {
+                const newFilename = generateFilename(
+                    req.files[mapKey][0].originalname
+                );
+                if (!storeMap(req.files[mapKey][0].buffer, newFilename)) {
+                    res.status(500).send("Error saving file. Please try again");
+                    return;
+                } else
+                    createdPost.Model[
+                        // Sets first character to uppercase.
+                        mapKey.charAt(0).toUpperCase() + mapKey.slice(1)
+                    ] = newFilename;
+            }
+        }
+
+        // Normal map
+        if (isPresent(req.files.normalMap)) {
+            const newFilename = generateFilename(
+                req.files.normalMap[0].originalname
+            );
+            if (!storeMap(req.files.normalMap[0].buffer, newFilename)) {
+                res.status(500).send("Error saving file. Please try again");
+                return;
+            } else {
+                createdPost.Model.NormalMap = newFilename;
+                createdPost.Model.IsTangentSpace = req.body.isTangentSpace;
+            }
+        }
+
+        // Mesh saving
+        const newFilename = generateFilename(req.files.mesh[0].originalname);
+        if (!storeMesh(req.files.mesh[0].buffer, newFilename)) {
+            res.status(500).send("Error saving file. Please try again");
+            return;
+        } else createdPost.Model.Mesh = newFilename;
+    }
 
     // Media storage
     if (isPresent(req.files.images)) {
