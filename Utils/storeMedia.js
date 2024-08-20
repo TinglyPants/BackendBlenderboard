@@ -54,4 +54,4 @@ const storeMap = async (buffer, desiredFilename) => {
     }
 };
 
-module.exports = { storeImage, storeVideo, storeModel };
+module.exports = { storeImage, storeVideo, storeMesh, storeMap };
