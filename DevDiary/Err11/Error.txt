@@ -1,0 +1,20 @@
+Ok, I need to change how the model system works. 
+The following is a plan for what i need to do and how imma do it
+
+Model needs to be nested as a separate object in the post
+models need the following now (* indicates required):
+
+Mesh * (if model included ofc)
+Alpha map
+Ambient occlusion map
+Bump map
+displacement map
+emissive map
+metalness map
+normal map
+tangent or object space (bool) (* if normal map)
+roughness map
+albedo map
+
+Im going to change the postSchema and modify the post creation endpoint and post reading endpoint to accommodate this.
+Once that is done, I will be able to work on it from the frontend and my job here will be done.
