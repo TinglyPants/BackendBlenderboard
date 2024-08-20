@@ -23,7 +23,20 @@ router.get("/active", (req, res) => {
 router.post(
     "/create",
     // Upload middleware retrieves all files
-    upload.fields([{ name: "images" }, { name: "video" }, { name: "model" }]),
+    upload.fields([
+        { name: "images" },
+        { name: "video" },
+        { name: "mesh" },
+        { name: "alphaMap" },
+        { name: "ambientOcclusionMap" },
+        { name: "bumpMap" },
+        { name: "displacementMap" },
+        { name: "emissiveMap" },
+        { name: "metalnessMap" },
+        { name: "normalMap" },
+        { name: "roughnessMap" },
+        { name: "albedoMap" },
+    ]),
     requiresAuth,
     create
 );
