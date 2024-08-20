@@ -70,12 +70,6 @@ const create = async (req, res) => {
             return;
         }
     }
-    if (isPresent(req.files.model)) {
-        if (req.files.model.length > 1) {
-            res.status(400).send("Too many models!");
-            return;
-        }
-    }
 
     // Media validation
     if (isPresent(req.files.images)) {
@@ -96,15 +90,6 @@ const create = async (req, res) => {
             return;
         }
     }
-    if (isPresent(req.files.model)) {
-        if (!isValidModel(req.files.model[0])) {
-            res.status(400).send(
-                "Invalid model file: " + req.files.model[0].originalname
-            );
-            return;
-        }
-    }
-
     const createdPost = new Post({
         Title: req.body.title,
         Description: req.body.description,
@@ -131,13 +116,6 @@ const create = async (req, res) => {
             res.status(500).send("Error saving file. Please try again");
             return;
         } else createdPost.Video = newFilename;
-    }
-    if (isPresent(req.files.model)) {
-        const newFilename = generateFilename(req.files.model[0].originalname);
-        if (!storeModel(req.files.model[0].buffer, newFilename)) {
-            res.status(500).send("Error saving file. Please try again");
-            return;
-        } else createdPost.Model = newFilename;
     }
 
     createdPost.Comments.push(null); // to be added in later prototype
