@@ -26,11 +26,25 @@ const storeVideo = async (buffer, desiredFilename) => {
     }
 };
 
-const storeModel = async (buffer, desiredFilename) => {
+const storeMesh = async (buffer, desiredFilename) => {
     const formData = new FormData();
-    formData.append("model", new Blob([buffer]));
+    formData.append("mesh", new Blob([buffer]));
     const mediaResponse = await fetch(
-        "http://localhost:4000/media/model/create/" + desiredFilename,
+        "http://localhost:4000/media/mesh/create/" + desiredFilename,
+        { method: "POST", body: formData }
+    );
+    if ((await mediaResponse.status) === 200) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
+const storeMap = async (buffer, desiredFilename) => {
+    const formData = new FormData();
+    formData.append("map", new Blob([buffer]));
+    const mediaResponse = await fetch(
+        "http://localhost:4000/media/map/create/" + desiredFilename,
         { method: "POST", body: formData }
     );
     if ((await mediaResponse.status) === 200) {
