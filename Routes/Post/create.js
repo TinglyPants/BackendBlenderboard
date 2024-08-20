@@ -13,6 +13,7 @@ const {
     isValidImage,
     isValidVideo,
     isValidModel,
+    isValidMap,
 } = require("../../Utils/isValidMedia");
 const {
     storeImage,
@@ -90,6 +91,54 @@ const create = async (req, res) => {
             return;
         }
     }
+
+    // Map validation
+    // Normal map excluded because needs isTangentSpace validated separately
+    const mapKeys = [
+        "alphaMap",
+        "ambientOcclusionMap",
+        "bumpMap",
+        "displacementMap",
+        "emissiveMap",
+        "metalnessMap",
+        "roughnessMap",
+        "albedoMap",
+    ];
+    for (const mapKey of mapKeys) {
+        if (isPresent(req.files[mapKey])) {
+            if (req.files[mapKey].length > 1) {
+                res.status(400).send("Too many maps: " + mapKey);
+                return;
+            }
+            if (!isValidMap(req.files[mapKey][0])) {
+                res.status(400).send(
+                    "Invalid map file: " + req.files[mapKey][0].originalname
+                );
+                return;
+            }
+        }
+    }
+
+    // Normal map validation
+    if (isPresent(req.files.normalMap)) {
+        if (req.files.normalMap.length > 1) {
+            res.status(400).send("Too many maps: normalMap");
+            return;
+        }
+        if (!isValidMap(req.files.normalMap[0])) {
+            res.status(400).send(
+                "Invalid map file: " + req.files.normalMap[0].originalname
+            );
+            return;
+        }
+        if (!isPresent(req.body.isTangentSpace)) {
+            res.status(400).send(
+                "Please specify whether normal map is tangent or object space!"
+            );
+            return;
+        }
+    }
+
     const createdPost = new Post({
         Title: req.body.title,
         Description: req.body.description,
