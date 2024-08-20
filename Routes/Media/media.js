@@ -168,7 +168,7 @@ router.post(
                 "../../mediaStorage/map/",
                 req.params.filename
             ),
-            req.files.map[0].buffer,
+            req.files["map"][0].buffer,
             (err) => {
                 if (err) {
                     res.status(500).send("Something went wrong saving file!");
