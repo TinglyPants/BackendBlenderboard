@@ -3,9 +3,8 @@ const emailRegex =
 const standardAllowedCharRegex = /^[a-zA-Z0-9!%&?#_\-+,\.\s]+$/;
 const imageExtRegex = /(.png|.jpg|.jpeg|.gif|.webp)$/;
 const videoExtRegex = /(.mp4|.webm|.ogg)$/;
-const modelExtRegex = /(.obj|.fbx|.stl|.gltf|.glb|.dae)$/;
+const modelExtRegex = /(.glb)$/;
 const passwordRegex = /^(?=.*[A-Z])(?=.*\d).+$/;
-const mapExtRegex = /(.png|.jpg|.jpeg)$/;
 
 module.exports = {
     emailRegex,
@@ -14,5 +13,4 @@ module.exports = {
     videoExtRegex,
     modelExtRegex,
     passwordRegex,
-    mapExtRegex,
 };
