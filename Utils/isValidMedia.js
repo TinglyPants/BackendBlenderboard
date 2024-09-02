@@ -2,12 +2,10 @@ const {
     imageExtRegex,
     videoExtRegex,
     modelExtRegex,
-    mapExtRegex,
 } = require("../Config/regularExpressions");
 const {
     imageMimeTypes,
     videoMimeTypes,
-    mapMimeTypes,
 } = require("../Config/allowedMimeTypes");
 
 const isValidImage = (image) => {
@@ -40,15 +38,4 @@ const isValidModel = (model) => {
     return true;
 };
 
-const isValidMap = (map) => {
-    if (!mapMimeTypes.includes(map.mimetype)) {
-        return false;
-    }
-    if (!mapExtRegex.test(map.originalname.toLowerCase())) {
-        return false;
-    }
-
-    return true;
-};
-
-module.exports = { isValidImage, isValidVideo, isValidModel, isValidMap };
+module.exports = { isValidImage, isValidVideo, isValidModel };
