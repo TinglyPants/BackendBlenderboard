@@ -13,14 +13,11 @@ const {
     isValidImage,
     isValidVideo,
     isValidModel,
-    isValidMap,
 } = require("../../Utils/isValidMedia");
 const {
     storeImage,
     storeVideo,
     storeModel,
-    storeMap,
-    storeMesh,
 } = require("../../Utils/storeMedia");
 
 // Loading config
@@ -94,62 +91,15 @@ const create = async (req, res) => {
         }
     }
 
-    // Map validation
-    // Normal map excluded because needs isTangentSpace validated separately
-    const mapKeys = [
-        "alphaMap",
-        "ambientOcclusionMap",
-        "bumpMap",
-        "displacementMap",
-        "emissiveMap",
-        "metalnessMap",
-        "roughnessMap",
-        "albedoMap",
-    ];
-    for (const mapKey of mapKeys) {
-        if (isPresent(req.files[mapKey])) {
-            if (req.files[mapKey].length > 1) {
-                res.status(400).send("Too many maps: " + mapKey);
-                return;
-            }
-            if (!isValidMap(req.files[mapKey][0])) {
-                res.status(400).send(
-                    "Invalid map file: " + req.files[mapKey][0].originalname
-                );
-                return;
-            }
-        }
-    }
-
-    // Normal map validation
-    if (isPresent(req.files.normalMap)) {
-        if (req.files.normalMap.length > 1) {
-            res.status(400).send("Too many maps: normalMap");
+    // Model validation
+    if (isPresent(req.files.model)) {
+        if (req.files.model.length > 1) {
+            res.status(400).send("Too many models!");
             return;
         }
-        if (!isValidMap(req.files.normalMap[0])) {
+        if (!isValidModel(req.files.model[0])) {
             res.status(400).send(
-                "Invalid map file: " + req.files.normalMap[0].originalname
-            );
-            return;
-        }
-        if (!isPresent(req.body.isTangentSpace)) {
-            res.status(400).send(
-                "Please specify whether normal map is tangent or object space!"
-            );
-            return;
-        }
-    }
-
-    // Mesh validation
-    if (isPresent(req.files.mesh)) {
-        if (req.files.mesh.length > 1) {
-            res.status(400).send("Too many meshes!");
-            return;
-        }
-        if (!isValidModel(req.files.mesh[0])) {
-            res.status(400).send(
-                "Invalid mesh file: " + req.files.mesh[0].originalname
+                "Invalid model file: " + req.files.model[0].originalname
             );
             return;
         }
@@ -164,43 +114,12 @@ const create = async (req, res) => {
     });
 
     // Model storage
-    if (isPresent(req.files.mesh)) {
-        for (const mapKey of mapKeys) {
-            if (isPresent(req.files[mapKey])) {
-                const newFilename = generateFilename(
-                    req.files[mapKey][0].originalname
-                );
-                if (!storeMap(req.files[mapKey][0].buffer, newFilename)) {
-                    res.status(500).send("Error saving file. Please try again");
-                    return;
-                } else
-                    createdPost.Model[
-                        // Sets first character to uppercase.
-                        mapKey.charAt(0).toUpperCase() + mapKey.slice(1)
-                    ] = newFilename;
-            }
-        }
-
-        // Normal map
-        if (isPresent(req.files.normalMap)) {
-            const newFilename = generateFilename(
-                req.files.normalMap[0].originalname
-            );
-            if (!storeMap(req.files.normalMap[0].buffer, newFilename)) {
-                res.status(500).send("Error saving file. Please try again");
-                return;
-            } else {
-                createdPost.Model.NormalMap = newFilename;
-                createdPost.Model.IsTangentSpace = req.body.isTangentSpace;
-            }
-        }
-
-        // Mesh saving
-        const newFilename = generateFilename(req.files.mesh[0].originalname);
-        if (!storeMesh(req.files.mesh[0].buffer, newFilename)) {
+    if (isPresent(req.files.model)) {
+        const newFilename = generateFilename(req.files.model[0].originalname);
+        if (!storeModel(req.files.model[0].buffer, newFilename)) {
             res.status(500).send("Error saving file. Please try again");
             return;
-        } else createdPost.Model.Mesh = newFilename;
+        } else createdPost.Model = newFilename;
     }
 
     // Media storage

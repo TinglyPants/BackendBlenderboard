@@ -10,19 +10,7 @@ const postSchema = new Schema({
     Images: [String],
     Video: String,
     Comments: [Schema.Types.ObjectId],
-    Model: {
-        Mesh: String,
-        AlphaMap: String,
-        AmbientOcclusionMap: String,
-        BumpMap: String,
-        DisplacementMap: String,
-        EmissiveMap: String,
-        MetalnessMap: String,
-        NormalMap: String,
-        IsTangentSpace: Boolean,
-        RoughnessMap: String,
-        AlbedoMap: String,
-    },
+    Model: String,
 });
 
 module.exports = postSchema;
