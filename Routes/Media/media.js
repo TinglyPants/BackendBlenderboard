@@ -53,35 +53,16 @@ router.get("/video/:videoID", (req, res) => {
     }
 });
 
-router.get("/mesh/:meshID", (req, res) => {
-    if (!isUuid(path.parse(req.params.meshID).name)) {
+router.get("/model/:modelID", (req, res) => {
+    if (!isUuid(path.parse(req.params.modelID).name)) {
         res.status(400).send("Invalid filename");
         return;
     }
 
     const searchPath = path.join(
         __dirname,
-        "../../mediaStorage/mesh",
-        req.params.meshID
-    );
-
-    if (fs.existsSync(searchPath)) {
-        res.sendFile(searchPath);
-    } else {
-        res.status(404).send("No file found.");
-    }
-});
-
-router.get("/map/:mapID", (req, res) => {
-    if (!isUuid(path.parse(req.params.mapID).name)) {
-        res.status(400).send("Invalid filename");
-        return;
-    }
-
-    const searchPath = path.join(
-        __dirname,
-        "../../mediaStorage/map",
-        req.params.mapID
+        "../../mediaStorage/model",
+        req.params.modelID
     );
 
     if (fs.existsSync(searchPath)) {
@@ -137,38 +118,16 @@ router.post(
 );
 
 router.post(
-    "/mesh/create/:filename",
-    upload.fields([{ name: "mesh" }]),
+    "/model/create/:filename",
+    upload.fields([{ name: "model" }]),
     async (req, res) => {
         fs.writeFile(
             path.join(
                 __dirname,
-                "../../mediaStorage/mesh/",
+                "../../mediaStorage/model/",
                 req.params.filename
             ),
-            req.files.mesh[0].buffer,
-            (err) => {
-                if (err) {
-                    res.status(500).send("Something went wrong saving file!");
-                } else {
-                    res.status(200).send("All good!");
-                }
-            }
-        );
-    }
-);
-
-router.post(
-    "/map/create/:filename",
-    upload.fields([{ name: "map" }]),
-    async (req, res) => {
-        fs.writeFile(
-            path.join(
-                __dirname,
-                "../../mediaStorage/map/",
-                req.params.filename
-            ),
-            req.files["map"][0].buffer,
+            req.files.model[0].buffer,
             (err) => {
                 if (err) {
                     res.status(500).send("Something went wrong saving file!");
