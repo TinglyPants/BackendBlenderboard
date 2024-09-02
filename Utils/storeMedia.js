@@ -26,11 +26,11 @@ const storeVideo = async (buffer, desiredFilename) => {
     }
 };
 
-const storeMesh = async (buffer, desiredFilename) => {
+const storeModel = async (buffer, desiredFilename) => {
     const formData = new FormData();
-    formData.append("mesh", new Blob([buffer]));
+    formData.append("model", new Blob([buffer]));
     const mediaResponse = await fetch(
-        "http://localhost:4000/media/mesh/create/" + desiredFilename,
+        "http://localhost:4000/media/model/create/" + desiredFilename,
         { method: "POST", body: formData }
     );
     if ((await mediaResponse.status) === 200) {
@@ -40,18 +40,4 @@ const storeMesh = async (buffer, desiredFilename) => {
     }
 };
 
-const storeMap = async (buffer, desiredFilename) => {
-    const formData = new FormData();
-    formData.append("map", new Blob([buffer]));
-    const mediaResponse = await fetch(
-        "http://localhost:4000/media/map/create/" + desiredFilename,
-        { method: "POST", body: formData }
-    );
-    if ((await mediaResponse.status) === 200) {
-        return true;
-    } else {
-        return false;
-    }
-};
-
-module.exports = { storeImage, storeVideo, storeMesh, storeMap };
+module.exports = { storeImage, storeVideo, storeModel };
