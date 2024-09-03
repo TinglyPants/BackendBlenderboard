@@ -18,7 +18,6 @@ const requiresAuth = (req, res, next) => {
                 res.status(403).send("Token invalid, please log in!");
                 return;
             } else {
-                console.log(payload);
                 req.user = payload;
                 next();
             }

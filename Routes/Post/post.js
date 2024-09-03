@@ -14,6 +14,7 @@ const { search } = require("./search");
 const {
     requiresAuth,
 } = require("../../Middleware/Authentication/requiresAuth");
+const { deletePost } = require("./delete");
 
 router.use(express.json());
 
@@ -41,8 +42,6 @@ router.put("/update", (req, res) => {
     res.status(501).send("Not Implemented");
 });
 
-router.delete("/delete/:postID", (req, res) => {
-    res.status(501).send("Not Implemented");
-});
+router.delete("/delete/:postID", upload.none(), requiresAuth, deletePost);
 
 module.exports = router;
