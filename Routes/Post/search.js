@@ -24,7 +24,10 @@ const search = async (req, res) => {
 
     const allPosts = await Post.find({
         Title: new RegExp(searchQuery, "i"),
-    }).exec();
+    })
+        .sort({ DateOfCreation: "desc" })
+        .limit(100)
+        .exec();
 
     const postIDArray = [];
     allPosts.forEach((post) => {

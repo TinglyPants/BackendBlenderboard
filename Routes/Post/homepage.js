@@ -9,7 +9,7 @@ const homepage = async (req, res) => {
     // 10 most recent posts
     const posts = await Post.find()
         .sort({ DateOfCreation: "desc" })
-        .limit(10)
+        .limit(100)
         .exec();
 
     const postIDArray = [];
