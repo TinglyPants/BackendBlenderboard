@@ -10,6 +10,7 @@ const { create } = require("./create");
 const { read } = require("./read");
 const { homepage } = require("./homepage");
 const { userpage } = require("./userpage");
+const { search } = require("./search");
 const {
     requiresAuth,
 } = require("../../Middleware/Authentication/requiresAuth");
@@ -33,6 +34,8 @@ router.get("/read/:postID", read);
 router.get("/homepage", homepage);
 
 router.get("/userpage/:userID", userpage);
+
+router.get("/search/:searchQuery", search);
 
 router.put("/update", (req, res) => {
     res.status(501).send("Not Implemented");
