@@ -10,11 +10,13 @@ const addComment = async (req, res) => {
     const requestedID = req.params.postID;
     let requestedPost;
 
+    // presence checking
     if (!isPresent(req.body.commentID)) {
         res.status(400).send("Missing comment ID.");
         return;
     }
 
+    // post gathering
     try {
         requestedPost = await Post.findById(requestedID).exec();
     } catch (err) {
