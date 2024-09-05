@@ -142,7 +142,6 @@ const create = async (req, res) => {
         } else createdPost.Video = newFilename;
     }
 
-    createdPost.Comments.push(null); // to be added in later prototype
     await createdPost.save();
 
     res.status(200).send("Successful post creation");
