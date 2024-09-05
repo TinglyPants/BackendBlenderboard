@@ -18,6 +18,7 @@ const storeImage = async (buffer, desiredFilename) => {
 const storeVideo = async (buffer, desiredFilename) => {
     const formData = new FormData();
     formData.append("video", new Blob([buffer]));
+    formData.append("serverSecret", process.env.SERVER_SECRET);
     const mediaResponse = await fetch(
         "http://localhost:4000/media/video/create/" + desiredFilename,
         { method: "POST", body: formData }
@@ -32,6 +33,7 @@ const storeVideo = async (buffer, desiredFilename) => {
 const storeModel = async (buffer, desiredFilename) => {
     const formData = new FormData();
     formData.append("model", new Blob([buffer]));
+    formData.append("serverSecret", process.env.SERVER_SECRET);
     const mediaResponse = await fetch(
         "http://localhost:4000/media/model/create/" + desiredFilename,
         { method: "POST", body: formData }
