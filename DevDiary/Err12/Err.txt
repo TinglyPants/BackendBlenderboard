@@ -1,0 +1,5 @@
+My async functions were returning promises when i didnt expect. Turns out, i need to await them.
+
+storeMedia, addCommentToPost
+
+btw, i have already finished the comment creation endpoint i just forgot to put this error in...
