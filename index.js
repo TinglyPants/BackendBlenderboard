@@ -17,6 +17,10 @@ app.use("/media", mediaRoutes);
 const userRoutes = require("./Routes/User/user");
 app.use("/users", userRoutes);
 
+// Connects comment routes to main server
+const commentRoutes = require("./Routes/Comment/comment");
+app.use("/comments", commentRoutes);
+
 const errorHandler = (err, req, res, next) => {
     if (err) {
         res.status(500).send(
