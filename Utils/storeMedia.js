@@ -1,6 +1,9 @@
+require("dotenv").config();
+
 const storeImage = async (buffer, desiredFilename) => {
     const formData = new FormData();
     formData.append("image", new Blob([buffer]));
+    formData.append("serverSecret", process.env.SERVER_SECRET);
     const mediaResponse = await fetch(
         "http://localhost:4000/media/image/create/" + desiredFilename,
         { method: "POST", body: formData }

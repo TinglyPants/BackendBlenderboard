@@ -6,6 +6,7 @@ const fs = require("fs");
 const { isUuid } = require("uuidv4");
 
 const multer = require("multer");
+const { serverOnly } = require("../../Middleware/Authentication/serverOnly");
 const memStorage = multer.memoryStorage();
 const upload = multer({
     storage: memStorage,
@@ -76,6 +77,7 @@ router.get("/model/:modelID", (req, res) => {
 router.post(
     "/image/create/:filename",
     upload.fields([{ name: "image" }]),
+    serverOnly,
     async (req, res) => {
         fs.writeFile(
             path.join(
@@ -98,6 +100,7 @@ router.post(
 router.post(
     "/video/create/:filename",
     upload.fields([{ name: "video" }]),
+    serverOnly,
     async (req, res) => {
         fs.writeFile(
             path.join(
@@ -120,6 +123,7 @@ router.post(
 router.post(
     "/model/create/:filename",
     upload.fields([{ name: "model" }]),
+    serverOnly,
     async (req, res) => {
         fs.writeFile(
             path.join(
