@@ -8,6 +8,7 @@ const upload = multer({ storage: memStorage });
 const {
     requiresAuth,
 } = require("../../Middleware/Authentication/requiresAuth");
+const { create } = require("./create");
 
 router.use(express.json());
 
@@ -15,7 +16,7 @@ router.get("/active", (req, res) => {
     res.status(200).send("Comment endpoint active!");
 });
 
-router.post("/create", upload.none(), requiresAuth);
+router.post("/create", upload.none(), requiresAuth, create);
 
 router.get("/read/:commentID");
 

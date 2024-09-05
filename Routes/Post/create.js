@@ -116,7 +116,7 @@ const create = async (req, res) => {
     // Model storage
     if (isPresent(req.files.model)) {
         const newFilename = generateFilename(req.files.model[0].originalname);
-        if (!storeModel(req.files.model[0].buffer, newFilename)) {
+        if (!(await storeModel(req.files.model[0].buffer, newFilename))) {
             res.status(500).send("Error saving file. Please try again");
             return;
         } else createdPost.Model = newFilename;
@@ -128,7 +128,7 @@ const create = async (req, res) => {
             const image = req.files.images[i];
             const newFilename = generateFilename(image.originalname);
 
-            if (!storeImage(image.buffer, newFilename)) {
+            if (!(await storeImage(image.buffer, newFilename))) {
                 res.status(500).send("Error saving file. Please try again");
                 return;
             } else createdPost.Images.push(newFilename);
@@ -136,7 +136,7 @@ const create = async (req, res) => {
     }
     if (isPresent(req.files.video)) {
         const newFilename = generateFilename(req.files.video[0].originalname);
-        if (!storeVideo(req.files.video[0].buffer, newFilename)) {
+        if (!(await storeVideo(req.files.video[0].buffer, newFilename))) {
             res.status(500).send("Error saving file. Please try again");
             return;
         } else createdPost.Video = newFilename;

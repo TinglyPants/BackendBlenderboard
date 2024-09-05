@@ -11,6 +11,8 @@ const emailMin = 3;
 const emailMax = 320;
 const passwordMin = 8;
 const passwordMax = 40;
+const commentMin = 1;
+const commentMax = 2000;
 
 module.exports = {
     titleMin,
@@ -25,4 +27,6 @@ module.exports = {
     emailMax,
     passwordMin,
     passwordMax,
+    commentMin,
+    commentMax,
 };

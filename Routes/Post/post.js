@@ -14,7 +14,9 @@ const { search } = require("./search");
 const {
     requiresAuth,
 } = require("../../Middleware/Authentication/requiresAuth");
+const { serverOnly } = require("../../Middleware/Authentication/serverOnly");
 const { deletePost } = require("./delete");
+const { addComment } = require("./addComment");
 
 router.use(express.json());
 
@@ -43,5 +45,7 @@ router.put("/update", (req, res) => {
 });
 
 router.delete("/delete/:postID", upload.none(), requiresAuth, deletePost);
+
+router.post("/add-comment/:postID", upload.none(), serverOnly, addComment);
 
 module.exports = router;

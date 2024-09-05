@@ -126,7 +126,7 @@ const create = async (req, res) => {
     const newFilename = generateFilename(
         req.files.profileImage[0].originalname
     );
-    if (!storeImage(req.files.profileImage[0].buffer, newFilename)) {
+    if (!(await storeImage(req.files.profileImage[0].buffer, newFilename))) {
         res.status(500).send("Error saving file. Please try again");
         return;
     }
