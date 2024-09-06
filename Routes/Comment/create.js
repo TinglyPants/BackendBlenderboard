@@ -36,13 +36,19 @@ const create = async (req, res) => {
     }
 
     // Create comment instance
-    const createdComment = new Comment({
-        Content: req.body.content,
-        Author: new mongoose.Types.ObjectId(req.user._id),
-        DateOfCreation: Date.now(),
-        Score: 0,
-        Post: new mongoose.Types.ObjectId(req.body.postID),
-    });
+    let createdComment;
+    try {
+        createdComment = new Comment({
+            Content: req.body.content,
+            Author: new mongoose.Types.ObjectId(req.user._id),
+            DateOfCreation: Date.now(),
+            Score: 0,
+            Post: new mongoose.Types.ObjectId(req.body.postID),
+        });
+    } catch (err) {
+        res.status(400).send("Something went wrong, please attempt later.");
+        return;
+    }
 
     // Contact post endpoint to assign comment to post
     if (
