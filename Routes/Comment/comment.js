@@ -9,6 +9,7 @@ const {
     requiresAuth,
 } = require("../../Middleware/Authentication/requiresAuth");
 const { create } = require("./create");
+const { read } = require("./read");
 
 router.use(express.json());
 
@@ -18,7 +19,7 @@ router.get("/active", (req, res) => {
 
 router.post("/create", upload.none(), requiresAuth, create);
 
-router.get("/read/:commentID");
+router.get("/read/:commentID", read);
 
 router.put("/update/:commentID");
 
