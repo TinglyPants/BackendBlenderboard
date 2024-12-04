@@ -15,8 +15,8 @@ const mediaRoutes = require("./Routes/Media/media");
 app.use("/media", mediaRoutes);
 
 // Connect user routes to main server
-const userRoutes = require("./Routes/User/user");
-app.use("/users", userRoutes);
+const userService = "http://localhost:7000";
+app.use("/users", proxy(userService));
 
 // Connects comment routes to main server
 const commentService = "http://localhost:5000";
