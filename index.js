@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const proxy = require("express-http-proxy");
 
 // Allowing for cross-origin resource sharing. (middleware)
 app.use(cors());
@@ -18,8 +19,8 @@ const userRoutes = require("./Routes/User/user");
 app.use("/users", userRoutes);
 
 // Connects comment routes to main server
-const commentRoutes = require("./Routes/Comment/comment");
-app.use("/comments", commentRoutes);
+const commentService = "http://localhost:5000";
+app.use("/comments", proxy(commentService));
 
 const errorHandler = (err, req, res, next) => {
     if (err) {
