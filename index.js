@@ -7,8 +7,8 @@ const proxy = require("express-http-proxy");
 app.use(cors());
 
 // Connect post routes to main server
-const postRoutes = require("./Routes/Post/post");
-app.use("/posts", postRoutes);
+const postService = "http://localhost:6000";
+app.use("/posts", proxy(postService));
 
 // Connect media routes to main server
 const mediaRoutes = require("./Routes/Media/media");
